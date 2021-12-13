@@ -19,6 +19,9 @@ class Type(BaseTable):
         verbose_name_plural = u"типы"
         database = database
 
+    def __str__(self):
+        return self.type
+
 
 class Package(BaseTable):
     package = peewee.CharField(max_length=16, null=False)
@@ -31,12 +34,13 @@ class Package(BaseTable):
 
 class Component(BaseTable):
     type = peewee.ForeignKeyField(Type, null=False)
-    package = peewee.ForeignKeyField(Package, null=False)
+    package = peewee.ForeignKeyField(Package, null=True)
     designation = peewee.CharField(max_length=255, null=False)
-    description = peewee.TextField(null=False)
-    datasheet = peewee.TextField()
+    description = peewee.TextField(null=True)
+    datasheet = peewee.TextField(null=True)
     address = peewee.CharField(max_length=8, null=False)
-    quantity = peewee.IntegerField(null=False)
+    box = peewee.CharField(max_length=4, null=False)
+    quantity = peewee.IntegerField(null=False, default=0)
 
     class Meta:
         verbose_name = u"компонент"
@@ -44,5 +48,13 @@ class Component(BaseTable):
         database = database
 
 
+def drop_all_tables():
+    database.drop_tables([Type, Package, Component])
+
+
+def create_tables():
+    database.create_tables([Type, Package, Component])
+
+
 database.connect()
-database.create_tables([Type, Package, Component])
+create_tables()

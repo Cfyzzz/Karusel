@@ -1,6 +1,9 @@
-from model import Component, Type, Package
+from model import Component, Type, Package, drop_all_tables, create_tables
 from peewee import DoesNotExist
 import pandas as pd
+
+column_names = {"Наименование": "designation", "№ Ящика": "box", "Ячейка": "address", "Кол-во": "quantity",
+                "Описание": "description", "Корпус": "package", "Datasheet": "datasheet"}
 
 
 class InsufficientException(Exception):
@@ -41,7 +44,8 @@ def decrement_element(component: Component, number: int):
         component.quantity -= number
         component.save()
     else:
-        raise InsufficientException(f"{component.description} {component.type} {component.package} на складе всего {component.quantity}, списываете {number}")
+        raise InsufficientException(
+            f"{component.description} {component.type} {component.package} на складе всего {component.quantity}, списываете {number}")
 
 
 def increment_element(component: Component, number: int):
@@ -62,15 +66,27 @@ def import_from_excel(excel_file, append=True):
     :param append: True (по умолчанию) - добавлять новые или заменять существующие записи;
     False - удалить теущие данные по базе и построить новую"""
     validate_file(excel_file)
-    xl = pd.read_excel(io=excel_file, engine='openpyxl')
+    xl = pd.ExcelFile(excel_file)
+
     if xl.sheet_names and not append:
-        drop_all_tables()
+        drop_tables()
 
     # Processing sheets
     for sheet_name in xl.sheet_names:
-        type = Type.get_or_create(type=sheet_name.lower())
-        df1 = xl.parse(sheet_name)
-        df1.head()
+        type, _ = Type.get_or_create(type=sheet_name)
+        df = xl.parse(sheet_name)
+
+        for idx, row in df.iterrows():
+            data_component = {'type': type}
+            for column_xl, column_bd in column_names.items():
+                if column_xl in row:
+                    data_component[column_bd] = row[column_xl]
+            print(data_component)
+            prepare_data_component(data_component)
+            quantity = data_component.pop("quantity", 0)
+            component, _ = Component.get_or_create(**data_component)
+            component.quantity += quantity
+            component.save()
 
 
 def export_to_excel(path):
@@ -95,6 +111,25 @@ def validate_file(file):
     ...
 
 
-def drop_all_tables():
-    """ Уничтожение всех таблиц """
-    ...
+def prepare_data_component(data):
+    """ Подготовка компонента к записи в базу """
+    data["designation"] = union_metric_format(data["designation"])
+
+    data["quantity"] = data["quantity"] if data["quantity"].__class__ is int else 0
+
+    if "package" in data:
+        package, _ = Package.get_or_create(package=data["package"])
+        package.save()
+        data["package"] = package
+
+
+def union_metric_format(designation):
+    """ Приведение обозначений номинала к единому формату """
+    # TODO -
+    return designation
+
+
+def drop_tables():
+    """ Создание новой базы данных """
+    drop_all_tables()
+    create_tables()
