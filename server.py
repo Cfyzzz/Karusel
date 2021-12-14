@@ -1,6 +1,7 @@
 import pandas as pd
 from peewee import DoesNotExist
 from openpyxl import Workbook
+import re
 
 from model import Component, Type, Package, drop_all_tables, create_tables
 
@@ -146,16 +147,33 @@ def prepare_data_component(data):
         data["package"] = package
 
 
-def union_metric_format(designation):
+def union_metric_format(value: str) -> str:
     """ Приведение обозначений номинала к единому формату """
-    # TODO -
-    return designation
+    reg = r'[+-]?\d+\.?\d*|[unpkM]?'
+    arr = re.findall(reg, value)
+    if not arr:
+        return value
+
+    val = arr[0]
+    liter = arr[1]
+
+    if liter == "u":
+        koef = 1000000
+    elif liter == "n":
+        koef = 1000
+    elif liter == "k":
+        koef = 1000
+    elif liter == "M":
+        koef = 1000000
+    else:
+        koef = 1
+
+    return str(float(val) * koef)
 
 
 def drop_tables():
     """ Создание новой базы данных """
     drop_all_tables()
     create_tables()
-
 
 # ref: https://www.knowledgehut.com/blog/programming/how-to-work-with-excel-using-python
