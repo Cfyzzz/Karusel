@@ -1,6 +1,8 @@
-from model import Component, Type, Package, drop_all_tables, create_tables
-from peewee import DoesNotExist
 import pandas as pd
+from peewee import DoesNotExist
+from openpyxl import Workbook
+
+from model import Component, Type, Package, drop_all_tables, create_tables
 
 column_names = {"Наименование": "designation", "№ Ящика": "box", "Ячейка": "address", "Кол-во": "quantity",
                 "Описание": "description", "Корпус": "package", "Datasheet": "datasheet"}
@@ -81,7 +83,7 @@ def import_from_excel(excel_file, append=True):
             for column_xl, column_bd in column_names.items():
                 if column_xl in row:
                     data_component[column_bd] = row[column_xl]
-            print(data_component)
+
             prepare_data_component(data_component)
             quantity = data_component.pop("quantity", 0)
             component, _ = Component.get_or_create(**data_component)
@@ -93,7 +95,25 @@ def export_to_excel(path):
     """ Экспортировать базу в Excel-файл
 
     :param path: путь к файлу для выгрузки """
-    ...
+    workbook = Workbook()
+    for type_item in Type.select():
+        new_sheet = workbook.create_sheet(type_item.type)
+        new_sheet.append(["", "Корпус", "Наименование", "№ Ящика", "Ячейка", "Кол-во", "Описание", "Datasheet"])
+        for component in Component.select().where(Component.type == type_item):
+            row = [
+                "",
+                str(component.package) if component.package else "",
+                component.designation,
+                component.box,
+                component.address,
+                component.quantity,
+                component.description,
+                component.datasheet
+            ]
+            new_sheet.append(row)
+
+    workbook.remove(workbook["Sheet"])
+    workbook.save(filename=path)
 
 
 def validate_component(component):
@@ -113,13 +133,16 @@ def validate_file(file):
 
 def prepare_data_component(data):
     """ Подготовка компонента к записи в базу """
+    data["description"] = "" if str(data["description"]) == "nan" else data["description"]
+
+    data["address"] = "" if str(data["address"]) == "nan" else data["address"]
+
     data["designation"] = union_metric_format(data["designation"])
 
     data["quantity"] = data["quantity"] if data["quantity"].__class__ is int else 0
 
     if "package" in data:
         package, _ = Package.get_or_create(package=data["package"])
-        package.save()
         data["package"] = package
 
 
@@ -133,3 +156,6 @@ def drop_tables():
     """ Создание новой базы данных """
     drop_all_tables()
     create_tables()
+
+
+# ref: https://www.knowledgehut.com/blog/programming/how-to-work-with-excel-using-python

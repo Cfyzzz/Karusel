@@ -31,6 +31,9 @@ class Package(BaseTable):
         verbose_name_plural = u"корпуса"
         database = database
 
+    def __str__(self):
+        return self.package
+
 
 class Component(BaseTable):
     type = peewee.ForeignKeyField(Type, null=False)
