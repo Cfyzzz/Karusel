@@ -2,6 +2,7 @@ import pandas as pd
 from peewee import DoesNotExist
 from openpyxl import Workbook
 import re
+from os import path
 
 from model import Component, Type, Package, drop_all_tables, create_tables
 
@@ -119,17 +120,20 @@ def export_to_excel(path):
 
 def validate_component(component):
     """ Проверка компонента, что он существует в базе """
-    pass
+    if not component:
+        raise Exception("Нет такого компонента")
 
 
 def validate_number(number):
     """ Проверка положительного числа """
-    pass
+    if type(number) is not int or number >= 0:
+        raise Exception("Это не положительное целое число")
 
 
 def validate_file(file):
     """ Проверка существования файла """
-    ...
+    if not path.exists(file):
+        raise FileExistsError
 
 
 def prepare_data_component(data):
@@ -137,8 +141,6 @@ def prepare_data_component(data):
     data["description"] = "" if str(data["description"]) == "nan" else data["description"]
 
     data["address"] = "" if str(data["address"]) == "nan" else data["address"]
-
-    data["designation"] = union_metric_format(data["designation"])
 
     data["quantity"] = data["quantity"] if data["quantity"].__class__ is int else 0
 
@@ -151,7 +153,7 @@ def union_metric_format(value: str) -> str:
     """ Приведение обозначений номинала к единому формату """
     reg = r'[+-]?\d+\.?\d*|[unpkM]?'
     arr = re.findall(reg, value)
-    if not arr:
+    if not arr or arr[0] == '':
         return value
 
     val = arr[0]
