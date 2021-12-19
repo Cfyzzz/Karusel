@@ -6,6 +6,7 @@ from os import path
 
 from model import Component, Type, Package, drop_all_tables, create_tables
 
+
 column_names = {"Наименование": "designation", "№ Ящика": "box", "Ячейка": "address", "Кол-во": "quantity",
                 "Описание": "description", "Корпус": "package", "Datasheet": "datasheet"}
 

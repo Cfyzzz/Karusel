@@ -1,17 +1,11 @@
 import peewee
-from settings import DATABASE_NAME
+from settings import DATABASE
 
 
-database = peewee.SqliteDatabase(DATABASE_NAME)
+database = peewee.SqliteDatabase(DATABASE["name"])
 
 
-class BaseTable(peewee.Model):
-    # В подклассе Meta указываем подключение к той или иной базе данных
-    class Meta:
-        database = database
-
-
-class Type(BaseTable):
+class Type(peewee.Model):
     type = peewee.CharField(max_length=64, null=False)
 
     class Meta:
@@ -23,7 +17,7 @@ class Type(BaseTable):
         return self.type
 
 
-class Package(BaseTable):
+class Package(peewee.Model):
     package = peewee.CharField(max_length=16, null=False)
 
     class Meta:
@@ -35,7 +29,7 @@ class Package(BaseTable):
         return self.package
 
 
-class Component(BaseTable):
+class Component(peewee.Model):
     type = peewee.ForeignKeyField(Type, null=False)
     package = peewee.ForeignKeyField(Package, null=True)
     designation = peewee.CharField(max_length=255, null=False)
