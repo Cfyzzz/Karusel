@@ -44,6 +44,22 @@ class Component(peewee.Model):
         verbose_name_plural = u"компоненты"
         database = database
 
+    @property
+    def serialize(self):
+        data = {
+            'id': self.id,
+            'type': str(self.type).strip(),
+            'package': str(self.package).strip(),
+            'designation': str(self.designation).strip(),
+            'description': str(self.description),
+            'datasheet': str(self.datasheet),
+            'address': str(self.address).strip(),
+            'box': str(self.box).strip(),
+            'quantity': self.quantity,
+        }
+
+        return data
+    
 
 def drop_all_tables():
     database.drop_tables([Type, Package, Component])

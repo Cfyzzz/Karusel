@@ -6,7 +6,6 @@ from os import path
 
 from model import Component, Type, Package, drop_all_tables, create_tables
 
-
 column_names = {"Наименование": "designation", "№ Ящика": "box", "Ячейка": "address", "Кол-во": "quantity",
                 "Описание": "description", "Корпус": "package", "Datasheet": "datasheet"}
 
@@ -26,12 +25,15 @@ class InsufficientException(Exception):
         return "InsufficientException has been raised"
 
 
-def get_rows(**filter) -> list[Component]:
+def get_rows(params: dict) -> list[Component]:
     """ Получить записи по фильтру
 
-    :param filter: фильтр для запроса"""
+    :param params: фильтр для запроса"""
     try:
-        return Component.select().where(**filter)
+        if len(params) > 0:
+            # TODO - Подготовить параметры
+            return Component.select().where(*[getattr(Component, k) == v for k, v in params.items()])
+        return Component.select()
     except DoesNotExist:
         return []
 
@@ -180,3 +182,4 @@ def drop_tables():
     create_tables()
 
 # ref: https://www.knowledgehut.com/blog/programming/how-to-work-with-excel-using-python
+# ref: https://coderoad.ru/53640958/%D0%9E%D0%B1%D1%8A%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5-%D0%BD%D0%B5%D0%BE%D0%B1%D1%8F%D0%B7%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D1%85-%D1%84%D0%B8%D0%BB%D1%8C%D1%82%D1%80%D0%BE%D0%B2-%D0%BF%D0%B5%D1%80%D0%B5%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D1%85-%D0%B7%D0%B0%D0%BF%D1%80%D0%BE%D1%81%D0%BE%D0%B2-%D0%B2-Peewee
