@@ -6,11 +6,10 @@ import model
 
 
 DEBUG = True
-SECRET_KEY = 'ssshhhh'
 
 app = Flask(__name__)
 app.config.from_object(__name__)
-app.secret_key = SECRET_KEY
+app.secret_key = settings.SECRET_KEY
 
 
 @app.route('/components', methods=['GET', 'POST'])

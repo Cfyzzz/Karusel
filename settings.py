@@ -1,4 +1,5 @@
 # configure our database
+SECRET_KEY = 'ssshhhh'
 DATABASE = {
     'name': 'components.sqlite3',
     'engine': 'peewee.SqliteDatabase',

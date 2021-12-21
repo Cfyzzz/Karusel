@@ -96,3 +96,5 @@ class TestRestServer(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+# ref: https://peter-jp-xie.medium.com/rest-api-testing-using-python-751022c364b8
