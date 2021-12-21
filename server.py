@@ -1,5 +1,6 @@
 from flask import *
 
+import settings
 import tools
 import model
 
@@ -33,7 +34,15 @@ def components():
         return res
 
     elif request.method == 'POST':
-        ...
+        # make new component
+        if not request.json:
+            abort(400)
+        new_component = tools.new_component(request.json)
+        res = jsonify({
+            'component': new_component.serialize
+        })
+        res.status_code = 201
+        return res
 
 
 # @app.route('/components/<string:type>/<string:designation>', methods=['GET'])
@@ -54,7 +63,7 @@ def components():
 
 
 if __name__ == '__main__':
-    app.run(host='localhost', port=3000, debug=True)
+    app.run(host=settings.DATABASE['host'], port=settings.DATABASE['port'], debug=DEBUG)
     # app.run()
 
 

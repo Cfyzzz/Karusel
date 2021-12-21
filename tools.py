@@ -31,8 +31,8 @@ def get_rows(params: dict) -> list[Component]:
     :param params: фильтр для запроса"""
     try:
         if len(params) > 0:
-            # TODO - Подготовить параметры
-            return Component.select().where(*[getattr(Component, k) == v for k, v in params.items()])
+            available_filter = ["id", "package", "designation", "address", "box"]
+            return Component.select().where(*[getattr(Component, k) == v for k, v in params.items() if k in available_filter])
         return Component.select()
     except DoesNotExist:
         return []
@@ -141,11 +141,14 @@ def validate_file(file):
 
 def prepare_data_component(data):
     """ Подготовка компонента к записи в базу """
-    data["description"] = "" if str(data["description"]) == "nan" else data["description"]
+    if "description" in data:
+        data["description"] = "" if str(data["description"]) == "nan" else data["description"]
 
-    data["address"] = "" if str(data["address"]) == "nan" else data["address"]
+    if "address" in data:
+        data["address"] = "" if str(data["address"]) == "nan" else data["address"]
 
-    data["quantity"] = data["quantity"] if data["quantity"].__class__ is int else 0
+    if "quantity" in data:
+        data["quantity"] = data["quantity"] if data["quantity"].__class__ is int else 0
 
     if "package" in data:
         package, _ = Package.get_or_create(package=data["package"])
@@ -180,6 +183,21 @@ def drop_tables():
     """ Создание новой базы данных """
     drop_all_tables()
     create_tables()
+
+
+def new_component(json_component):
+    # print(">>", json_component)
+    if 'type' not in json_component:
+        return None
+    type, _ = Type.get_or_create(type=json_component['type'])
+    json_component['type'] = type
+    prepare_data_component(json_component)
+    quantity = json_component.pop("quantity", 0)
+    component, _ = Component.get_or_create(**json_component)
+    component.quantity += quantity
+    component.save()
+    return component
+
 
 # ref: https://www.knowledgehut.com/blog/programming/how-to-work-with-excel-using-python
 # ref: https://coderoad.ru/53640958/%D0%9E%D0%B1%D1%8A%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5-%D0%BD%D0%B5%D0%BE%D0%B1%D1%8F%D0%B7%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D1%85-%D1%84%D0%B8%D0%BB%D1%8C%D1%82%D1%80%D0%BE%D0%B2-%D0%BF%D0%B5%D1%80%D0%B5%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D1%85-%D0%B7%D0%B0%D0%BF%D1%80%D0%BE%D1%81%D0%BE%D0%B2-%D0%B2-Peewee

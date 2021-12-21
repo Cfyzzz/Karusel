@@ -5,4 +5,5 @@ DATABASE = {
     'user': 'username',
     'password': 'password',
     'host': 'localhost',
+    'port': 3000,
 }

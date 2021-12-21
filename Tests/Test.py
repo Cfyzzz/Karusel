@@ -1,3 +1,7 @@
+import requests
+import json
+
+import settings
 import tools
 import unittest
 
@@ -65,6 +69,29 @@ class TestConvertValue(unittest.TestCase):
         fact = tools.union_metric_format("AN6651")
         expected = "AN6651"
         self.assertEqual(expected, fact)
+
+
+class TestRestServer(unittest.TestCase):
+    base_url = f"http://{settings.DATABASE['host']}:{settings.DATABASE['port']}"
+
+    def test_new_component_components_post(self):
+        url = self.base_url + "/components"
+
+        # Additional headers.
+        headers = {'Content-Type': 'application/json'}
+
+        # Body
+        payload = {'type': "резисторы", 'designation': 'R9997', 'address': 'X-Y', 'box': 'ZZ', 'quantity': 10}
+
+        # convert dict to json string by json.dumps() for body data.
+        resp = requests.post(url, headers=headers, data=json.dumps(payload, indent=4))
+
+        # Validate response headers and body contents, e.g. status code.
+        assert resp.status_code == 201
+        resp_body = resp.json()
+        assert resp_body['component']['quantity'] >= 10
+        assert resp_body['component']['id'] > 0
+        assert resp_body['component']['type'] == payload['type']
 
 
 if __name__ == "__main__":

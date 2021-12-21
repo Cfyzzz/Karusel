@@ -16,6 +16,9 @@ class Type(peewee.Model):
     def __str__(self):
         return self.type
 
+    def __repr__(self):
+        return self.type
+
 
 class Package(peewee.Model):
     package = peewee.CharField(max_length=16, null=False)
@@ -59,7 +62,7 @@ class Component(peewee.Model):
         }
 
         return data
-    
+
 
 def drop_all_tables():
     database.drop_tables([Type, Package, Component])
