@@ -89,9 +89,65 @@ class TestRestServer(unittest.TestCase):
         # Validate response headers and body contents, e.g. status code.
         assert resp.status_code == 201
         resp_body = resp.json()
-        assert resp_body['component']['quantity'] >= 10
+        assert resp_body['component']['quantity'] == 10
         assert resp_body['component']['id'] > 0
         assert resp_body['component']['type'] == payload['type']
+
+    def test_new_component_components_post_empty_body_failed(self):
+        url = self.base_url + "/components"
+        headers = {'Content-Type': 'application/json'}
+        payload = {}
+        resp = requests.post(url, headers=headers, data=json.dumps(payload, indent=4))
+        assert resp.status_code == 400
+
+    def test_new_component_components_post_no_type_failed(self):
+        url = self.base_url + "/components"
+        headers = {'Content-Type': 'application/json'}
+        payload = {'designation': 'R9998', 'address': 'X-Y', 'box': 'ZZ', 'quantity': 10}
+        resp = requests.post(url, headers=headers, data=json.dumps(payload, indent=4))
+        assert resp.status_code == 400
+
+    def test_new_component_components_post_without_quantity(self):
+        url = self.base_url + "/components"
+        headers = {'Content-Type': 'application/json'}
+        payload = {'type': "резисторы", 'designation': 'R9995', 'address': 'X-Y', 'box': 'ZZ'}
+        resp = requests.post(url, headers=headers, data=json.dumps(payload, indent=4))
+        assert resp.status_code == 201
+        resp_body = resp.json()
+        assert resp_body['component']['quantity'] == 0
+
+    def test_new_component_components_push_put_empty_body_failed(self):
+        url = self.base_url + "/components/push"
+        headers = {'Content-Type': 'application/json'}
+        payload = {}
+        resp = requests.put(url, headers=headers, data=json.dumps(payload, indent=4))
+        assert resp.status_code == 400
+
+    def test_new_component_components_push_put_without_address_failed(self):
+        url = self.base_url + "/components/push"
+        headers = {'Content-Type': 'application/json'}
+        payload = {'type': "резисторы", 'designation': 'R9997', 'box': 'ZZ', 'quantity': 10}
+        resp = requests.put(url, headers=headers, data=json.dumps(payload, indent=4))
+        assert resp.status_code == 400
+
+    def test_new_component_components_push_put(self):
+        url = self.base_url + "/components/push"
+        headers = {'Content-Type': 'application/json'}
+        payload = {'type': "резисторы", 'designation': 'R9996', 'address': 'X-Y', 'box': 'ZZ', 'quantity': 10}
+        resp = requests.put(url, headers=headers, data=json.dumps(payload, indent=4))
+        assert resp.status_code in [201, 204]
+
+    def test_new_component_components_pop_put(self):
+        url_create = self.base_url + "/components/push"
+        url_pop = self.base_url + "/components/pop"
+        headers = {'Content-Type': 'application/json'}
+        payload_create = {'type': "резисторы", 'designation': 'R9996', 'address': 'X-Y', 'box': 'ZZ', 'quantity': 10}
+        payload_pop = {'designation': 'R9996', 'address': 'X-Y', 'box': 'ZZ', 'quantity': 4}
+        requests.put(url_create, headers=headers, data=json.dumps(payload_create, indent=4))
+        resp = requests.put(url_pop, headers=headers, data=json.dumps(payload_pop, indent=4))
+        assert resp.status_code == 204
+        resp = requests.delete(url_pop, headers=headers, data=json.dumps(payload_pop, indent=4))
+        assert resp.status_code == 204
 
 
 if __name__ == "__main__":

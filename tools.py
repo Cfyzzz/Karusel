@@ -185,17 +185,82 @@ def drop_tables():
     create_tables()
 
 
-def new_component(json_component):
-    # print(">>", json_component)
+def new_component(json_component: dict):
+    """ Создаёт новый компонет или перезаписывает существующий
+
+    :param json_component - словарь с полями компонента
+    :return component, created - компонент и флаг о создании нового в базе
+    """
     if 'type' not in json_component:
-        return None
+        return None, None
     type, _ = Type.get_or_create(type=json_component['type'])
     json_component['type'] = type
     prepare_data_component(json_component)
+    component, created = Component.get_or_create(**json_component)
+    component.save()
+    return component, created
+
+
+def append_component(json_component: dict):
+    """ Добавляет компонент в базу. Увеличивает счетчик, если такой существуюет, иначе создаёт новый
+
+    :param json_component - словарь с полями компонента
+    :return component, created - компонент и флаг о создании нового в базе
+    """
     quantity = json_component.pop("quantity", 0)
-    component, _ = Component.get_or_create(**json_component)
+    component, created = new_component(json_component)
+    if component is None:
+        return None, None
     component.quantity += quantity
     component.save()
+    return component, created
+
+
+def delete_component(params: dict):
+    """ Удалить компонент, соответствующий параметрам
+    Обязательные поля: designation, address, box
+
+    :param params - фильтр для запроса
+    :returns количество удаленных строк в случае успеха, иначе None
+    """
+    try:
+        available_filter = ["id", "package", "designation", "address", "box"]
+        required_fields = ["designation", "address", "box"]
+        if all(map(lambda x: x in params, required_fields)):
+            component = Component.get(*[getattr(Component, k) == v for k, v in params.items() if k in available_filter])
+        else:
+            component = None
+    except DoesNotExist:
+        component = None
+
+    if component:
+        return component.delete_instance()
+    return component
+
+
+def decrement_component(params: dict):
+    """ Уменьшить количество [quantity] компонета [designation] по адресу [address, box]
+    Обязательные поля: designation, address, box, quantity
+
+    :param params - фильтр для запроса
+    :returns результирующее количество компонента, иначе None
+    """
+    params_ = params.copy()
+    try:
+        available_filter = ["id", "package", "designation", "address", "box"]
+        required_fields = ["designation", "address", "box", "quantity"]
+        if all(map(lambda x: x in params_, required_fields)):
+            quantity = params_.pop("quantity", 0)
+            component = Component.get(*[getattr(Component, k) == v for k, v in params_.items() if k in available_filter])
+            component.quantity -= min(quantity, component.quantity)
+            component.save()
+        else:
+            component = None
+    except DoesNotExist:
+        component = None
+
+    if component:
+        return component.quantity
     return component
 
 
