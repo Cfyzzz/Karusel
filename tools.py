@@ -1,8 +1,8 @@
-import pandas as pd
-from peewee import DoesNotExist
-from openpyxl import Workbook
 import re
 from os import path
+
+import pandas as pd
+from openpyxl import Workbook
 
 from model import Component, Type, Package, drop_all_tables, create_tables
 
@@ -23,19 +23,6 @@ class InsufficientException(Exception):
         if self.message:
             return f"InsufficientException, {self.message}"
         return "InsufficientException has been raised"
-
-
-def get_rows(params: dict) -> list[Component]:
-    """ Получить записи по фильтру
-
-    :param params: фильтр для запроса"""
-    try:
-        if len(params) > 0:
-            available_filter = ["id", "package", "designation", "address", "box"]
-            return Component.select().where(*[getattr(Component, k) == v for k, v in params.items() if k in available_filter])
-        return Component.select()
-    except DoesNotExist:
-        return []
 
 
 def decrement_element(component: Component, number: int):
@@ -199,69 +186,6 @@ def new_component(json_component: dict):
     component, created = Component.get_or_create(**json_component)
     component.save()
     return component, created
-
-
-def append_component(json_component: dict):
-    """ Добавляет компонент в базу. Увеличивает счетчик, если такой существуюет, иначе создаёт новый
-
-    :param json_component - словарь с полями компонента
-    :return component, created - компонент и флаг о создании нового в базе
-    """
-    quantity = json_component.pop("quantity", 0)
-    component, created = new_component(json_component)
-    if component is None:
-        return None, None
-    component.quantity += quantity
-    component.save()
-    return component, created
-
-
-def delete_component(params: dict):
-    """ Удалить компонент, соответствующий параметрам
-    Обязательные поля: designation, address, box
-
-    :param params - фильтр для запроса
-    :returns количество удаленных строк в случае успеха, иначе None
-    """
-    try:
-        available_filter = ["id", "package", "designation", "address", "box"]
-        required_fields = ["designation", "address", "box"]
-        if all(map(lambda x: x in params, required_fields)):
-            component = Component.get(*[getattr(Component, k) == v for k, v in params.items() if k in available_filter])
-        else:
-            component = None
-    except DoesNotExist:
-        component = None
-
-    if component:
-        return component.delete_instance()
-    return component
-
-
-def decrement_component(params: dict):
-    """ Уменьшить количество [quantity] компонета [designation] по адресу [address, box]
-    Обязательные поля: designation, address, box, quantity
-
-    :param params - фильтр для запроса
-    :returns результирующее количество компонента, иначе None
-    """
-    params_ = params.copy()
-    try:
-        available_filter = ["id", "package", "designation", "address", "box"]
-        required_fields = ["designation", "address", "box", "quantity"]
-        if all(map(lambda x: x in params_, required_fields)):
-            quantity = params_.pop("quantity", 0)
-            component = Component.get(*[getattr(Component, k) == v for k, v in params_.items() if k in available_filter])
-            component.quantity -= min(quantity, component.quantity)
-            component.save()
-        else:
-            component = None
-    except DoesNotExist:
-        component = None
-
-    if component:
-        return component.quantity
-    return component
 
 
 # ref: https://www.knowledgehut.com/blog/programming/how-to-work-with-excel-using-python

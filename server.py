@@ -1,8 +1,7 @@
 from flask import *
 
 import settings
-import tools
-import model
+from services import *
 
 DEBUG = True
 
@@ -14,79 +13,30 @@ app.secret_key = settings.SECRET_KEY
 @app.route('/components', methods=['GET', 'POST'])
 def components():
     if request.method == 'GET':
-        query = tools.get_rows(request.args)
-        data = [item.serialize for item in query]
-        if data:
-            res = jsonify({
-                'components': data
-            })
-            res.status_code = 200
-        else:
-            # if no results are found.
-            output = {
-                "error": "No results found. Check url again",
-                "url": request.url,
-            }
-            res = jsonify(output)
-            res.status_code = 404
-        return res
+        service = ComponentsGetService(request)
+        return service.run()
 
     elif request.method == 'POST':
-        # make new component
-        if not request.json:
-            abort(400)
-
-        new_component, _ = tools.new_component(request.json)
-        if new_component is None:
-            abort(400)
-
-        res = jsonify({
-            'component': new_component.serialize
-        })
-        res.status_code = 201
-        return res
+        service = ComponentsPostService(request)
+        return service.run()
 
 
 @app.route('/components/push', methods=['PUT'])
 def component_push():
     if request.method == 'PUT':
-        if not request.json:
-            abort(400)
-
-        if 'box' not in request.json or 'address' not in request.json:
-            abort(400)
-
-        _, created = tools.append_component(request.json)
-        res = jsonify({})
-        res.status_code = 201 if created else 204
-        return res
+        service = ComponentsPushPutService(request)
+        return service.run()
 
 
 @app.route('/components/pop', methods=['DELETE', 'PUT'])
 def component_pop():
     if request.method == 'PUT':
-        if not request.json:
-            abort(400)
-
-        result = tools.decrement_component(request.json)
-        if result is None:
-            abort(400)
-
-        res = jsonify({})
-        res.status_code = 204
-        return res
+        service = ComponentsPopPutService(request)
+        return service.run()
 
     elif request.method == 'DELETE':
-        if tools.delete_component(request.json):
-            res = jsonify({})
-            res.status_code = 204
-        else:
-            res = jsonify({
-                "Error": "The requested resource is no longer available at the "
-                         "server or incorrect parameters provided."
-            })
-            res.status_code = 410
-        return res
+        service = ComponentsPopDeleteService(request)
+        return service.run()
 
 # @app.route('/import', method=['POST'])
 # def from_excel():
