@@ -93,6 +93,21 @@ class TestRestServer(unittest.TestCase):
         assert resp_body['component']['id'] > 0
         assert resp_body['component']['type'] == payload['type']
 
+    def test_components_get_by_id(self):
+        url = self.base_url + "/components"
+        quantity = 9
+        headers = {'Content-Type': 'application/json'}
+        payload = {'type': "резисторы", 'designation': 'R9994', 'address': 'X-Y', 'box': 'ZZ', 'quantity': quantity}
+        resp = requests.post(url, headers=headers, data=json.dumps(payload, indent=4))
+        assert resp.status_code == 201
+        resp_body = resp.json()
+        the_id = resp_body['component']['id']
+        url += f"?id={the_id}"
+        resp = requests.get(url, headers=headers)
+        resp_body = resp.json()
+        assert resp_body['components'][0]['quantity'] == quantity
+        assert resp_body['components'][0]['id'] == the_id
+
     def test_new_component_components_post_empty_body_failed(self):
         url = self.base_url + "/components"
         headers = {'Content-Type': 'application/json'}
