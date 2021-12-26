@@ -6,7 +6,7 @@ import tools
 import unittest
 
 
-class TestStringMethods(unittest.TestCase):
+class TestImportExportMethods(unittest.TestCase):
     def test_import_from_excel(self):
         tools.import_from_excel("store.xls", append=False)
 

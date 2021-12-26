@@ -38,11 +38,23 @@ def component_pop():
         service = ComponentsPopDeleteService(request)
         return service.run()
 
-# @app.route('/import', method=['POST'])
-# def from_excel():
-#     ...
-#
-#
+
+@app.route('/import', methods=['GET', 'POST'])
+def from_excel():
+    if request.method == 'POST':
+        service = UploadExcelFileService(request, app.config)
+        return service.run()
+    return '''
+        <!doctype html>
+        <title>Upload new File</title>
+        <h1>Upload new File</h1>
+        <form action="" method=post enctype=multipart/form-data>
+          <p><input type=file name=file>
+             <input type=submit value=Upload>
+        </form>
+        '''
+
+
 # @app.route('/export', method=['GET'])
 # def to_excel():
 #     ...
@@ -55,3 +67,4 @@ if __name__ == '__main__':
 # ref: https://medium.com/@prabhath_kiran/simple-rest-api-using-flask-and-peewee-3d75c7bff515
 # ref: https://habr.com/ru/post/483202/
 # ref: https://ru.stackoverflow.com/questions/779534/%D0%9F%D0%B5%D1%80%D0%B5%D0%B4%D0%B0%D1%87%D0%B0-%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D1%85-%D0%BC%D0%B5%D0%B6%D0%B4%D1%83-%D0%B2%D1%8C%D1%8E%D1%88%D0%BA%D0%B0%D0%BC%D0%B8-python-flask
+# https://flask-russian-docs.readthedocs.io/ru/latest/patterns/fileuploads.html
