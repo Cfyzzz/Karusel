@@ -55,9 +55,11 @@ def from_excel():
         '''
 
 
-# @app.route('/export', method=['GET'])
-# def to_excel():
-#     ...
+@app.route('/export', methods=['GET'])
+def to_excel():
+    if request.method == 'GET':
+        service = ExportToExcelFileGetService(request)
+        return service.run()
 
 
 if __name__ == '__main__':

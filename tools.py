@@ -4,7 +4,7 @@ from os import path
 import pandas as pd
 from openpyxl import Workbook
 
-from model import Component, Type, Package, drop_all_tables, create_tables
+from model import Component, Type, Package, drop_all_tables, create_tables, peewee
 
 column_names = {"Наименование": "designation", "№ Ящика": "box", "Ячейка": "address", "Кол-во": "quantity",
                 "Описание": "description", "Корпус": "package", "Datasheet": "datasheet"}
@@ -186,6 +186,15 @@ def new_component(json_component: dict):
     component, created = Component.get_or_create(**json_component)
     component.save()
     return component, created
+
+
+def is_valid_bd() -> bool:
+    """ Проверка на существование БД
+
+    :return True - если существует БД и заполнена, False - иначе
+    """
+    quantity = Component.select(peewee.fn.COUNT(Component.id))
+    return quantity > 0
 
 
 # ref: https://www.knowledgehut.com/blog/programming/how-to-work-with-excel-using-python

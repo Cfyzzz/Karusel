@@ -19,6 +19,9 @@ class UploadExcelFileService(IService):
 
     def run(self):
         file = self.request.files['file']
+        if not os.access(UPLOAD_FOLDER, os.F_OK):
+            os.makedirs(UPLOAD_FOLDER)
+
         try:
             if file and self.allowed_file(file.filename):
                 filename = "excel_file"
