@@ -3,6 +3,8 @@ from os import path
 
 import pandas as pd
 from openpyxl import Workbook
+from peewee import DoesNotExist
+from werkzeug.exceptions import abort
 
 from model import Component, Type, Package, drop_all_tables, create_tables, peewee
 
@@ -166,6 +168,36 @@ def union_metric_format(value: str) -> str:
     return str(float(val) * koef)
 
 
+def get_all_types():
+    """ Получить все типы компонентов
+
+    :return Список типов компонентов """
+    return Type.select()
+
+
+def generate_type_url(type_id: int) -> str:
+    """ Генерирует ссылку на страницу компонентов заданного типа
+
+    :param type_id - id типа
+    :return строка-ссылка на нужную страницу """
+
+    if get_type_by_id(type_id) is None:
+        abort(404)
+    return f"type/{type_id}"
+
+
+def get_components(type_id: int):
+    try:
+        type_comp = Type.get_by_id(type_id)
+        return Component.select().where(Component.type == type_comp)
+    except DoesNotExist:
+        return []
+
+
+def get_type_by_id(type_id: int):
+    return Type.get_or_none(Type.id == type_id)
+
+
 def drop_tables():
     """ Создание новой базы данных """
     drop_all_tables()
@@ -195,7 +227,6 @@ def is_valid_bd() -> bool:
     """
     quantity = Component.select(peewee.fn.COUNT(Component.id))
     return quantity > 0
-
 
 # ref: https://www.knowledgehut.com/blog/programming/how-to-work-with-excel-using-python
 # ref: https://coderoad.ru/53640958/%D0%9E%D0%B1%D1%8A%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5-%D0%BD%D0%B5%D0%BE%D0%B1%D1%8F%D0%B7%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D1%85-%D1%84%D0%B8%D0%BB%D1%8C%D1%82%D1%80%D0%BE%D0%B2-%D0%BF%D0%B5%D1%80%D0%B5%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D1%85-%D0%B7%D0%B0%D0%BF%D1%80%D0%BE%D1%81%D0%BE%D0%B2-%D0%B2-Peewee

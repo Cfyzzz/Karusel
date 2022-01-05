@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content_title %} {{ type_comp['type'] }} {% endblock %}
+{% block content %}
+    <table>
+        <tr>
+            <th>Наименование</th>
+            <th>№ Ящика</th>
+            <th>Ячейка</th>
+            <th>Кол-во</th>
+            <th>Описание</th>
+            <th>Корпус</th>
+            <th>DataSheet</th>
+        </tr>
+    {% for component in components %}
+        <tr>
+            <td>{{ component['designation'] }}</td>
+            <td>{{ component['box'] }}</td>
+            <td>{{ component['address'] }}</td>
+            <td>{{ component['quantity'] }}</td>
+            <td>{{ component['description'] }}</td>
+            <td>{{ component['package'] }}</td>
+            <td>{{ component['datasheet'] }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+
+{% endblock %}

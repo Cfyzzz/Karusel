@@ -2,12 +2,31 @@ from flask import *
 
 import settings
 from services import *
+from tools import get_all_types, get_components, get_type_by_id
 
 DEBUG = True
 
 app = Flask(__name__)
 app.config.from_object(__name__)
 app.secret_key = settings.SECRET_KEY
+
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+
+@app.route('/stock')
+def stock():
+    types = get_all_types()
+    return render_template('stock.html', types=types)
+
+
+@app.route('/type/<int:type_id>')
+def types(type_id):
+    components = get_components(type_id)
+    type_component = get_type_by_id(type_id)
+    return render_template('components.html', components=components, type_comp=type_component)
 
 
 @app.route('/components', methods=['GET', 'POST'])
@@ -70,3 +89,4 @@ if __name__ == '__main__':
 # ref: https://habr.com/ru/post/483202/
 # ref: https://ru.stackoverflow.com/questions/779534/%D0%9F%D0%B5%D1%80%D0%B5%D0%B4%D0%B0%D1%87%D0%B0-%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D1%85-%D0%BC%D0%B5%D0%B6%D0%B4%D1%83-%D0%B2%D1%8C%D1%8E%D1%88%D0%BA%D0%B0%D0%BC%D0%B8-python-flask
 # https://flask-russian-docs.readthedocs.io/ru/latest/patterns/fileuploads.html
+# https://www.digitalocean.com/community/tutorials/how-to-make-a-web-application-using-flask-in-python-3-ru
