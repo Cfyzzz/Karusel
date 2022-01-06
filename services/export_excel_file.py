@@ -12,9 +12,6 @@ EXPORT_FOLDER = './exports'
 
 
 class ExportToExcelFileGetService(IService):
-    def __init__(self, the_request):
-        super().__init__(the_request)
-
     def run(self):
         if not tools.is_valid_bd():
             # В БД нет компонентов

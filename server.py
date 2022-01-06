@@ -2,7 +2,7 @@ from flask import *
 
 import settings
 from services import *
-from tools import get_all_types, get_components, get_type_by_id
+
 
 DEBUG = True
 
@@ -18,15 +18,14 @@ def index():
 
 @app.route('/stock')
 def stock():
-    types = get_all_types()
-    return render_template('stock.html', types=types)
+    service = StockGetService(request)
+    return service.run()
 
 
 @app.route('/type/<int:type_id>')
 def types(type_id):
-    components = get_components(type_id)
-    type_component = get_type_by_id(type_id)
-    return render_template('components.html', components=components, type_comp=type_component)
+    service = TypesGetService(request, type_id=type_id)
+    return service.run()
 
 
 @app.route('/components', methods=['GET', 'POST'])

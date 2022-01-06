@@ -5,3 +5,6 @@ from .components_pop_put import ComponentsPopPutService
 from .components_pop_delete import ComponentsPopDeleteService
 from .upload_exel_file import UploadExcelFileService
 from .export_excel_file import ExportToExcelFileGetService
+from .stock_get import StockGetService
+from .types_get import TypesGetService
+

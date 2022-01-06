@@ -3,8 +3,6 @@ from os import path
 
 import pandas as pd
 from openpyxl import Workbook
-from peewee import DoesNotExist
-from werkzeug.exceptions import abort
 
 from model import Component, Type, Package, drop_all_tables, create_tables, peewee
 
@@ -166,29 +164,6 @@ def union_metric_format(value: str) -> str:
         koef = 1
 
     return str(float(val) * koef)
-
-
-def get_all_types():
-    """ Получить все типы компонентов
-
-    :return Список типов компонентов """
-    return Type.select()
-
-
-def get_components(type_id: int):
-    """ Получить компонеты согласно id типу
-
-    :param type_id - идентификатор id типа
-    """
-    try:
-        type_comp = Type.get_by_id(type_id)
-        return Component.select().where(Component.type == type_comp)
-    except DoesNotExist:
-        return []
-
-
-def get_type_by_id(type_id: int):
-    return Type.get_or_none(Type.id == type_id)
 
 
 def drop_tables():
