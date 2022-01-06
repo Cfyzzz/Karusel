@@ -175,18 +175,11 @@ def get_all_types():
     return Type.select()
 
 
-def generate_type_url(type_id: int) -> str:
-    """ Генерирует ссылку на страницу компонентов заданного типа
-
-    :param type_id - id типа
-    :return строка-ссылка на нужную страницу """
-
-    if get_type_by_id(type_id) is None:
-        abort(404)
-    return f"type/{type_id}"
-
-
 def get_components(type_id: int):
+    """ Получить компонеты согласно id типу
+
+    :param type_id - идентификатор id типа
+    """
     try:
         type_comp = Type.get_by_id(type_id)
         return Component.select().where(Component.type == type_comp)
