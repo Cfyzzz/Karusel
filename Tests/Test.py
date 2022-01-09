@@ -1,9 +1,9 @@
-import requests
 import json
-
-import settings
-import tools
 import unittest
+
+import requests
+
+import tools
 
 
 class TestImportExportMethods(unittest.TestCase):
@@ -72,7 +72,7 @@ class TestConvertValue(unittest.TestCase):
 
 
 class TestRestServer(unittest.TestCase):
-    base_url = f"http://{settings.DATABASE['host']}:{settings.DATABASE['port']}"
+    base_url = tools.get_base_url()
 
     def test_new_component_components_post(self):
         url = self.base_url + "/components"

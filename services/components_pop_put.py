@@ -1,5 +1,6 @@
 from peewee import DoesNotExist
 
+import tools
 from model import Component
 from .iservise import *
 
@@ -26,18 +27,26 @@ class ComponentsPopPutService(IService):
         :returns результирующее количество компонента, иначе None
         """
         params_ = params.copy()
-        try:
-            available_filter = ["id", "package", "designation", "address", "box"]
-            required_fields = ["designation", "address", "box", "quantity"]
-            if all(map(lambda x: x in params_, required_fields)):
+
+        available_filter = ["id", "package", "designation", "address", "box"]
+        required_fields = ["designation", "address", "box", "quantity"]
+        if "id" in params_ or all(map(lambda x: x in params_, required_fields)):
+            try:
+                if "id" in params_:
+                    component = Component.get_by_id(params_["id"])
+                    if not tools.validate_component(component):
+                        return None
+                else:
+                    component = Component.get(
+                        *[getattr(Component, k) == v for k, v in params_.items() if k in available_filter])
+
+                tools.prepare_data_component(params_)
                 quantity = params_.pop("quantity", 0)
-                component = Component.get(
-                    *[getattr(Component, k) == v for k, v in params_.items() if k in available_filter])
                 component.quantity -= min(quantity, component.quantity)
                 component.save()
-            else:
+            except DoesNotExist:
                 component = None
-        except DoesNotExist:
+        else:
             component = None
 
         if component:
