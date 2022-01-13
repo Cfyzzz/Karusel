@@ -3,8 +3,9 @@
 {% block content_title %} {{ type_comp['type'] }} {% endblock %}
 {% block content %}
 <script type=text/javascript>
-function saveId(id) {
+function saveId(id, op) {
     $("#componentId").val(id);
+    $("#componentOp").val(op);
 }
 </script>
 <form method="post">
@@ -30,7 +31,10 @@ function saveId(id) {
             <td>
                 <div class="btn-cart btn-group" role="group" aria-label="Cart action">
                     <button type="button" id="btnDecrement" class="btn btn-secondary" data-toggle="modal"
-                            data-target="#decrementStoreModal" OnClick="saveId({{ component['id'] }});">Списать
+                            data-target="#decrementStoreModal" OnClick="saveId({{ component['id'] }}, 'dec');">-
+                    </button>
+                    <button type="button" id="btnDIncrement" class="btn btn-secondary" data-toggle="modal"
+                            data-target="#incrementStoreModal" OnClick="saveId({{ component['id'] }}, 'inc');">+
                     </button>
                 </div>
             </td>
@@ -63,7 +67,34 @@ function saveId(id) {
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="incrementStoreModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="incrementStoreModalLabel">Добавление компонента</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                        <div class="form-outline">
+                            <label class="form-label" for="incrementNumber">Количество:</label>
+                            <input id="incrementNumber" type="number" class="form-control" size="3" name="num" min="1" max="99"
+                                   value="1">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                            <button type="submit" class="btn btn-primary">Добавить</button>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <input type="hidden" name="componentId" id="componentId" >
+    <input type="hidden" name="componentOp" id="componentOp" >
 </form>
 
 {% endblock %}

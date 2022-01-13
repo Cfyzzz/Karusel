@@ -22,7 +22,7 @@ class ComponentsPushPutService(IService):
         :param json_component - словарь с полями компонента
         :return component, created - компонент и флаг о создании нового в базе
         """
-        quantity = json_component.pop("quantity", 0)
+        quantity = int(json_component.pop("quantity", 0))
         component, created = tools.new_component(json_component)
         if component is None:
             return None, None

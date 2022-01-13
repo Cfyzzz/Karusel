@@ -22,6 +22,16 @@ def stock():
     return service.run()
 
 
+@app.route('/append', methods=['GET', 'POST'])
+def append():
+    if request.method == 'GET':
+        service = AppendGetService(request)
+        return service.run()
+    if request.method == 'POST':
+        service = AppendPostService(request)
+        return service.run()
+
+
 @app.route('/type/<int:type_id>', methods=['GET', 'POST'])
 def types(type_id):
     if request.method == 'GET':

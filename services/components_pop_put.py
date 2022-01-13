@@ -42,7 +42,10 @@ class ComponentsPopPutService(IService):
 
                 tools.prepare_data_component(params_)
                 quantity = params_.pop("quantity", 0)
-                component.quantity -= min(quantity, component.quantity)
+                if quantity > component.quantity:
+                    flash(f"Недостаточное количество для списания компонента {component.type} {component.designation}")
+                    return None
+                component.quantity -= quantity
                 component.save()
             except DoesNotExist:
                 component = None

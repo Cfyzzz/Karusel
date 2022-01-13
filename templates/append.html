@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block content_title %} Добавить компонент на склад {% endblock %}
+{% block content %}
+
+<form method="post">
+    <div class="input-group">
+        <div class="input-group-prepend">
+            <span class="input-group-text">Тип</span>
+        </div>
+        <input type="text" list="all_types" name="type"/>
+        <datalist id="all_types">
+            {% for type in types %}
+            <option value="{{ type['type'] }}">{{ type['type'] }}</option>
+            {% endfor %}
+        </datalist>
+    </div>
+
+    <div class="input-group">
+        <div class="input-group-prepend">
+            <span class="input-group-text">Корпус</span>
+        </div>
+        <input type="text" list="all_packages" name="package"/>
+        <datalist id="all_packages">
+            {% for package in packages %}
+            <option value="{{ package['package'] }}">{{ package['package'] }}</option>
+            {% endfor %}
+        </datalist>
+    </div>
+
+    <div class="input-group">
+        <div class="input-group-prepend">
+            <span class="input-group-text">Наименование</span>
+        </div>
+        <input type="text" class="form-control" name="designation">
+    </div>
+
+    <div class="input-group">
+        <div class="input-group-prepend">
+            <span class="input-group-text">Описание</span>
+        </div>
+        <input type="text" class="form-control" name="description">
+    </div>
+
+    <div class="input-group">
+        <div class="input-group-prepend">
+            <span class="input-group-text">Datasheet</span>
+        </div>
+        <input type="text" class="form-control" name="datasheet">
+    </div>
+
+    <div class="input-group">
+        <div class="input-group-prepend">
+            <span class="input-group-text">Ячейка</span>
+        </div>
+        <input type="text" class="form-control" name="address">
+    </div>
+
+    <div class="input-group">
+        <div class="input-group-prepend">
+            <span class="input-group-text">№ Ящика</span>
+        </div>
+        <input type="text" class="form-control" name="box">
+    </div>
+
+    <div class="input-group">
+        <div class="input-group-prepend">
+            <span class="input-group-text">Количество</span>
+        </div>
+        <input type="text" class="form-control" name="quantity">
+    </div>
+
+    <button type="submit" class="btn btn-primary">Добавить</button>
+</form>
+
+{% endblock %}
