@@ -6,13 +6,35 @@ from model import Component
 from .iservise import *
 
 
+URL_KARUSEL = "http://192.168.55.34:8083"
+
+
 class TypesPostService(IService):
     def run(self):
         if self.request.form.get('componentOp') == "dec":
+            try:
+                component = Component.get_by_id(self.request.form.get('componentId'))
+            except DoesNotExist:
+                flash("Что-то пошло не так. Компонент не найден")
+                return redirect(request.url)
+
             url_pop = tools.get_base_url() + "/components/pop"
             payload_pop = {'id': self.request.form.get('componentId'), 'quantity': self.request.form.get('num')}
             headers = {'Content-Type': 'application/json'}
             requests.put(url_pop, headers=headers, data=json.dumps(payload_pop, indent=4))
+
+            is_karusel = component.box.strip().lower()[0:1] in ["k", "к"]
+            if is_karusel:
+                address = component.address.split("-")
+                if len(address) == 2:
+                    row_device = address[0].strip()
+                    column_device = address[1].strip()
+                    floor_device = component.box[1:].strip()
+                    url = URL_KARUSEL + "/get?row=" + row_device + "&column=" + column_device + "&floor=" + floor_device
+                    try:
+                        requests.get(url, timeout=3)
+                    except requests.exceptions.ConnectTimeout:
+                        flash("На карусель запрос не ушёл :(")
             return redirect(request.url)
 
         elif self.request.form.get('componentOp') == "inc":

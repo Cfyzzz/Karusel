@@ -27,14 +27,14 @@ function saveId(id, op) {
             <td>{{ component['quantity'] }}</td>
             <td>{{ component['description'] }}</td>
             <td>{{ component['package'] }}</td>
-            <td>{{ component['datasheet'] }}</td>
+            <td class="col-2">{{ component['datasheet'] }}</td>
             <td>
                 <div class="btn-cart btn-group" role="group" aria-label="Cart action">
                     <button type="button" id="btnDecrement" class="btn btn-secondary" data-toggle="modal"
-                            data-target="#decrementStoreModal" OnClick="saveId({{ component['id'] }}, 'dec');">-
+                            data-target="#decrementStoreModal" OnClick="saveId({{ component['id'] }}, 'dec');">Get
                     </button>
                     <button type="button" id="btnDIncrement" class="btn btn-secondary" data-toggle="modal"
-                            data-target="#incrementStoreModal" OnClick="saveId({{ component['id'] }}, 'inc');">+
+                            data-target="#incrementStoreModal" OnClick="saveId({{ component['id'] }}, 'inc');">Put
                     </button>
                 </div>
             </td>
