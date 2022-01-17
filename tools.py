@@ -154,7 +154,7 @@ def prepare_data_component(data):
 
 def union_metric_format(value: str) -> str:
     """ Приведение обозначений номинала к единому формату """
-    reg = r'[+-]?\d+\.?\d*|[unpkM]?'
+    reg = r'[+-]?\d+\.?\d*|[unpkKкКM]?'
     arr = re.findall(reg, value)
     if not arr or arr[0] == '':
         return value
@@ -166,7 +166,7 @@ def union_metric_format(value: str) -> str:
         koef = 1000000
     elif liter == "n":
         koef = 1000
-    elif liter == "k":
+    elif liter in ["k", "K", "к", "К"]:
         koef = 1000
     elif liter == "M":
         koef = 1000000
@@ -190,8 +190,8 @@ def new_component(json_component: dict):
     """
     if 'type' not in json_component:
         return None, None
-    type, _ = Type.get_or_create(type=json_component['type'])
-    json_component['type'] = type
+    type_, _ = Type.get_or_create(type=json_component['type'])
+    json_component['type'] = type_
     prepare_data_component(json_component)
     component, created = Component.get_or_create(**json_component)
     component.save()

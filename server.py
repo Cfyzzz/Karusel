@@ -61,9 +61,9 @@ def component_push():
         return service.run()
 
 
-@app.route('/components/pop', methods=['DELETE', 'PUT'])
+@app.route('/components/pop', methods=['DELETE', 'PUT', 'GET'])
 def component_pop():
-    if request.method == 'PUT':
+    if request.method in ['PUT', 'GET']:
         service = ComponentsPopPutService(request)
         return service.run()
 

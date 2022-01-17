@@ -7,15 +7,26 @@ from .iservise import *
 
 class ComponentsPopPutService(IService):
     def run(self):
-        if not self.request.json:
-            abort(400)
+        # if not self.request.json:
+        if not self.request.args:
+            # abort(400)
+            res = jsonify({})
+            res.status_code = 400
+            res.headers.add("Access-Control-Allow-Origin", "*")
+            return res
 
-        result = self.decrement_component(self.request.json)
+        # result = self.decrement_component(self.request.json)
+        result = self.decrement_component(self.request.args)
         if result is None:
-            abort(400)
+            # abort(400)
+            res = jsonify({})
+            res.status_code = 400
+            res.headers.add("Access-Control-Allow-Origin", "*")
+            return res
 
         res = jsonify({})
         res.status_code = 204
+        res.headers.add("Access-Control-Allow-Origin", "*")
         return res
 
     @staticmethod
