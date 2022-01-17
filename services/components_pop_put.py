@@ -7,8 +7,12 @@ from .iservise import *
 
 class ComponentsPopPutService(IService):
     def run(self):
+        if request.method == 'PUT':
+            collect = self.request.json
+        else:
+            collect = self.request.args
         # if not self.request.json:
-        if not self.request.args:
+        if not collect:
             # abort(400)
             res = jsonify({})
             res.status_code = 400
@@ -16,7 +20,7 @@ class ComponentsPopPutService(IService):
             return res
 
         # result = self.decrement_component(self.request.json)
-        result = self.decrement_component(self.request.args)
+        result = self.decrement_component(collect)
         if result is None:
             # abort(400)
             res = jsonify({})

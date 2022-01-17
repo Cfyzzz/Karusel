@@ -19,7 +19,7 @@ class TypesPostService(IService):
                 return redirect(request.url)
 
             url_pop = tools.get_base_url() + "/components/pop"
-            payload_pop = {'id': self.request.form.get('componentId'), 'quantity': self.request.form.get('num')}
+            payload_pop = {'id': self.request.form.get('componentId'), 'quantity': self.request.form.get('numDec')}
             headers = {'Content-Type': 'application/json'}
             requests.put(url_pop, headers=headers, data=json.dumps(payload_pop, indent=4))
 
@@ -47,7 +47,7 @@ class TypesPostService(IService):
             url = tools.get_base_url() + "/components/push"
             headers = {'Content-Type': 'application/json'}
             payload_push = {'id': component.id,
-                            'quantity': self.request.form.get('num'),
+                            'quantity': self.request.form.get('numInc'),
                             'address': component.address,
                             'box': component.box,
                             'type': component.type.type
