@@ -2,7 +2,7 @@ import peewee
 from settings import DATABASE
 
 
-database = peewee.SqliteDatabase(DATABASE["name"])
+database = peewee.SqliteDatabase(DATABASE["path"])
 
 
 class Type(peewee.Model):
@@ -60,7 +60,6 @@ class Component(peewee.Model):
             'box': str(self.box).strip(),
             'quantity': self.quantity,
         }
-
         return data
 
 

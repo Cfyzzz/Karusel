@@ -4,8 +4,6 @@ import settings
 from services import *
 
 
-DEBUG = True
-
 app = Flask(__name__)
 app.config.from_object(__name__)
 app.secret_key = settings.SECRET_KEY
@@ -96,12 +94,4 @@ def to_excel():
 
 
 if __name__ == '__main__':
-    app.run(host=settings.DATABASE['host'], port=settings.DATABASE['port'], debug=DEBUG)
-    # app.run()
-
-# ref: https://medium.com/@prabhath_kiran/simple-rest-api-using-flask-and-peewee-3d75c7bff515
-# ref: https://habr.com/ru/post/483202/
-# ref: https://ru.stackoverflow.com/questions/779534/%D0%9F%D0%B5%D1%80%D0%B5%D0%B4%D0%B0%D1%87%D0%B0-%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D1%85-%D0%BC%D0%B5%D0%B6%D0%B4%D1%83-%D0%B2%D1%8C%D1%8E%D1%88%D0%BA%D0%B0%D0%BC%D0%B8-python-flask
-# https://flask-russian-docs.readthedocs.io/ru/latest/patterns/fileuploads.html
-# https://www.digitalocean.com/community/tutorials/how-to-make-a-web-application-using-flask-in-python-3-ru
-# https://coderoad.ru/42601478/Flask-%D0%B2%D1%8B%D0%B7%D0%BE%D0%B2-%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B8-python-%D0%BD%D0%B0-%D0%BA%D0%BD%D0%BE%D0%BF%D0%BA%D0%B5-OnClick-%D1%81%D0%BE%D0%B1%D1%8B%D1%82%D0%B8%D0%B5
+    app.run(host=settings.HOST, port=settings.PORT, debug=settings.DEBUG)
