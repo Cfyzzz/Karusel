@@ -28,6 +28,7 @@ class UploadExcelFileService(IService):
                 path = os.path.join(UPLOAD_FOLDER, filename)
                 file.save(path)
                 tools.import_from_excel(path, append=False)
+                flash("База данных загружена")
                 return redirect(request.url)
         except RequestEntityTooLarge:
             # Превышен допустимый размер файла

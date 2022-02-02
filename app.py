@@ -31,13 +31,13 @@ def append():
 
 
 @app.route('/type/<int:type_id>', methods=['GET', 'POST'])
-def types(type_id):
+def type_component(type_id):
     if request.method == 'GET':
-        service = TypesGetService(request, type_id=type_id)
+        service = TypeGetService(request, type_id=type_id)
         return service.run()
 
     elif request.method == 'POST':
-        service = TypesPostService(request)
+        service = TypePostService(request)
         return service.run()
 
 
@@ -91,6 +91,32 @@ def to_excel():
     if request.method == 'GET':
         service = ExportToExcelFileGetService(request)
         return service.run()
+
+
+@app.route('/types', methods=['GET', 'POST'])
+def list_types():
+    if request.method == 'GET':
+        service = ListTypesGetService(request)
+        return service.run()
+    if request.method == 'POST':
+        service = ListTypesPostService(request)
+        return service.run()
+
+
+@app.route('/types/<int:type_id>')
+def types(type_id):
+    service = TypesGetService(request)
+    return service.run()
+
+
+@app.route('/packages', methods=['GET'])
+def list_packages():
+    ...
+
+
+@app.route('/packages/<int:package_id>', methods=['GET'])
+def packages(package_id):
+    ...
 
 
 if __name__ == '__main__':

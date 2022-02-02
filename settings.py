@@ -6,3 +6,4 @@ DATABASE = {
 HOST = 'localhost'
 PORT = 3000
 DEBUG = False
+URL_KARUSEL = "http://192.168.55.34:8083"

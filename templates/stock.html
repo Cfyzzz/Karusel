@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
 
+{% block title %} Склад компонентов {% endblock %}
 {% block content_title %} Склад компонентов {% endblock %}
 {% block content %}
     {% for type in types %}
-    <a href="{{ url_for('types', type_id=type['id']) }}">{{ type['type'] }}</a><br>
+    <a href="{{ url_for('type_component', type_id=type['id']) }}">{{ type['type'] }}</a><br>
     {% endfor %}
 {% endblock %}

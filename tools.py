@@ -209,3 +209,7 @@ def is_valid_bd() -> bool:
 
 def get_base_url():
     return f"http://{settings.HOST}:{settings.PORT}"
+
+
+def get_url_karusel() -> str:
+    return settings.URL_KARUSEL

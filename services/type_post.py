@@ -6,10 +6,7 @@ from model import Component
 from .iservise import *
 
 
-URL_KARUSEL = "http://192.168.55.34:8083"
-
-
-class TypesPostService(IService):
+class TypePostService(IService):
     def run(self):
         if self.request.form.get('componentOp') == "dec":
             try:
@@ -30,7 +27,10 @@ class TypesPostService(IService):
                     row_device = address[0].strip()
                     column_device = address[1].strip()
                     floor_device = component.box[1:].strip()
-                    url = URL_KARUSEL + "/get?row=" + row_device + "&column=" + column_device + "&floor=" + floor_device
+                    url = tools.get_url_karusel() \
+                          + "/get?row=" + row_device \
+                          + "&column=" + column_device \
+                          + "&floor=" + floor_device
                     try:
                         requests.get(url, timeout=3)
                     except requests.exceptions.ConnectTimeout:
@@ -54,4 +54,3 @@ class TypesPostService(IService):
                             }
             requests.put(url, headers=headers, data=json.dumps(payload_push, indent=4))
             return redirect(request.url)
-

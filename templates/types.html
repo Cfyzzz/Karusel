@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %} Типы компонентов {% endblock %}
+{% block content_title %} Типы компонентов {% endblock %}
+
+{% block content2 %}
+    {% for type in types %}
+    <a href="{{ url_for('types', type_id=type['id']) }}">{{ type['type'] }}</a><br>
+    {% endfor %}
+{% endblock %}
+
+{% block content %}
+<script type=text/javascript>
+function saveId(id) {
+    $("#typeId").val(id);
+}
+</script>
+<form method="post">
+    <table class="table">
+        <tr>
+            <th>Наименование типа</th>
+            <th class="col-2"></th>
+        </tr>
+        {% for type in types %}
+        <tr>
+            <td>{{ type['type'] }}</td>
+            <td>
+                <button type="submit" id="btnEdit" class="btn btn-secondary" data-toggle="modal"
+                    data-target="#decrementStoreModal" OnClick="saveId({{ type['id'] }});">Редактировать
+                </button>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <input type="hidden" name="typeId" id="typeId">
+</form>
+{% endblock %}

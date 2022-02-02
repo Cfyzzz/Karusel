@@ -3,7 +3,7 @@ from .iservise import *
 from peewee import DoesNotExist
 
 
-class TypesGetService(IService):
+class TypeGetService(IService):
     def run(self):
         type_id = self.params.get('type_id', None)
         if type_id is None:
