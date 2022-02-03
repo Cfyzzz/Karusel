@@ -213,3 +213,13 @@ def get_base_url():
 
 def get_url_karusel() -> str:
     return settings.URL_KARUSEL
+
+
+def is_valid_input_str(line: str, length=30) -> bool:
+    """ Проверка строки на длину и допустимые символы (буквы и цифры)
+
+    :param line: входящая строка
+    :param length: максимально допустимая длина строки
+    """
+    result = len(line) <= length and line != ""
+    return result and re.search(r"^\w+$", line)

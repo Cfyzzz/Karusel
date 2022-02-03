@@ -3,17 +3,20 @@
 {% block title %} Типы компонентов {% endblock %}
 {% block content_title %} Типы компонентов {% endblock %}
 
-{% block content2 %}
-    {% for type in types %}
-    <a href="{{ url_for('types', type_id=type['id']) }}">{{ type['type'] }}</a><br>
-    {% endfor %}
-{% endblock %}
-
 {% block content %}
 <script type=text/javascript>
 function saveId(id) {
     $("#typeId").val(id);
-}
+    $("#action").val("edit");
+    $(".toggle_hidden").toggle("hidden");
+};
+function actionDelete(id) {
+    $("#typeId").val(id);
+    $("#action").val("delete");
+};
+function actionAppend() {
+    $("#action").val("append");
+};
 </script>
 <form method="post">
     <table class="table">
@@ -25,13 +28,55 @@ function saveId(id) {
         <tr>
             <td>{{ type['type'] }}</td>
             <td>
-                <button type="submit" id="btnEdit" class="btn btn-secondary" data-toggle="modal"
-                    data-target="#decrementStoreModal" OnClick="saveId({{ type['id'] }});">Редактировать
-                </button>
+                <div class="btn-cart btn-group" role="group">
+                    <button type="button" id="btnEdit" class="btn btn-secondary" OnClick="saveId({{ type['id'] }});">
+                        Редактировать
+                    </button>
+                    <button type="button" id="btnDelete" class="btn btn-secondary" data-toggle="modal"
+                            data-target="#deleteTypeModal" OnClick="actionDelete({{ type['id'] }});">
+                        Удалить
+                    </button>
+                </div>
             </td>
         </tr>
         {% endfor %}
+        <tr>
+            <td>
+                <input type="text" class="form-control" name="typeName">
+            </td>
+            <td>
+                <button type="submit" id="btnAppend" class="btn btn-secondary" name="btnAppend" OnClick="actionAppend();">
+                    Добавить
+                </button>
+            </td>
+        </tr>
     </table>
+
+    <!-- Modal -->
+    <div class="modal fade" id="deleteTypeModal" tabindex="-1" role="dialog"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteTypeModalLabel">Удаление типа компонентов</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                        <div class="form-outline">
+                            <label class="form-label">Будут удалены и все компоненты этого типа. Удалить?</label>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                            <button type="submit" class="btn btn-primary">Удалить</button>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <input type="hidden" name="typeId" id="typeId">
+    <input type="hidden" name="action" id="action">
 </form>
 {% endblock %}

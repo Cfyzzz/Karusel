@@ -103,10 +103,16 @@ def list_types():
         return service.run()
 
 
+@app.route('/types/new')
+def types_new():
+    ...
+
+
 @app.route('/types/<int:type_id>')
 def types(type_id):
-    service = TypesGetService(request)
-    return service.run()
+    ...
+    # service = TypesGetService(request)
+    # return service.run()
 
 
 @app.route('/packages', methods=['GET'])
