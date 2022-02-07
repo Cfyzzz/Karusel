@@ -27,7 +27,7 @@ class ComponentsGetService(IService):
         return res
 
     @staticmethod
-    def get_rows(params: dict) -> list[Component]:
+    def get_rows(params: dict):
         """ Получить записи по фильтру
         Любые колмпоненты можно получить по следующим фильтрам: id, designation, address, box/
         Если не найдены компоненты, производится фильтра по полям type, value - в этом случае

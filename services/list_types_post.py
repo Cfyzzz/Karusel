@@ -11,21 +11,22 @@ class ListTypesPostService(IService):
         type_id = self.request.form.get('typeId')
 
         if action == "edit":
-            # TODO - В types.html кнопка Редактировать должна вызывать модальное окно для изменения названия типа
             try:
                 type_component = Type.get_by_id(type_id)
+                new_name = self.request.form.get('typeRename')
+                type_component.type = new_name
+                type_component.save()
             except DoesNotExist:
-                flash("Что-то пошло не так. Компонент не найден")
+                flash("Что-то пошло не так. Тип не найден")
                 return redirect(request.url)
-            url_edit = get_base_url() + "/types/" + type_id
-            return redirect(url_edit)
+            return redirect(request.url)
         elif action == "delete":
             try:
                 type_component = Type.get_by_id(type_id)
             except DoesNotExist:
-                flash("Что-то пошло не так. Компонент не найден")
+                flash("Что-то пошло не так. Тип не найден")
                 return redirect(request.url)
-            flash(f"Компонент \"{type_component.type}\" удалён")
+            flash(f"Тип \"{type_component.type}\" удалён")
             Type.delete_by_id(type_id)
             return redirect(request.url)
         elif action == "append":

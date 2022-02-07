@@ -8,7 +8,6 @@
 function saveId(id) {
     $("#typeId").val(id);
     $("#action").val("edit");
-    $(".toggle_hidden").toggle("hidden");
 };
 function actionDelete(id) {
     $("#typeId").val(id);
@@ -29,7 +28,8 @@ function actionAppend() {
             <td>{{ type['type'] }}</td>
             <td>
                 <div class="btn-cart btn-group" role="group">
-                    <button type="button" id="btnEdit" class="btn btn-secondary" OnClick="saveId({{ type['id'] }});">
+                    <button type="button" id="btnEdit" class="btn btn-secondary" data-toggle="modal"
+                            data-target="#renameTypeModal" OnClick="saveId({{ type['id'] }});">
                         Редактировать
                     </button>
                     <button type="button" id="btnDelete" class="btn btn-secondary" data-toggle="modal"
@@ -70,6 +70,30 @@ function actionAppend() {
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
                             <button type="submit" class="btn btn-primary">Удалить</button>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="renameTypeModal" tabindex="-1" role="dialog"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="renameTypeModalLabel">Переименование типа компонентов</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                        <div class="form-outline">
+                            <input type="text" class="form-control" name="typeRename">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                            <button type="submit" class="btn btn-primary">Принять</button>
                         </div>
                 </div>
             </div>
