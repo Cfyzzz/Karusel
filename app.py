@@ -103,26 +103,14 @@ def list_types():
         return service.run()
 
 
-@app.route('/types/new')
-def types_new():
-    ...
-
-
-@app.route('/types/<int:type_id>')
-def types(type_id):
-    ...
-    # service = TypesGetService(request)
-    # return service.run()
-
-
-@app.route('/packages', methods=['GET'])
+@app.route('/packages', methods=['GET', 'POST'])
 def list_packages():
-    ...
-
-
-@app.route('/packages/<int:package_id>', methods=['GET'])
-def packages(package_id):
-    ...
+    if request.method == 'GET':
+        service = ListPackagesGetService(request)
+        return service.run()
+    if request.method == 'POST':
+        service = ListPackagesPostService(request)
+        return service.run()
 
 
 if __name__ == '__main__':

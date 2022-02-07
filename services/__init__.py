@@ -8,6 +8,8 @@ from .export_excel_file import ExportToExcelFileGetService
 from .stock_get import StockGetService
 from .list_types_get import ListTypesGetService
 from .list_types_post import ListTypesPostService
+from .list_packages_get import ListPackagesGetService
+from .list_packages_post import ListPackagesPostService
 from .type_get import TypeGetService
 from .type_post import TypePostService
 from .append_get import AppendGetService

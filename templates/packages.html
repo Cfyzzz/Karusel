@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% block title %} Корпуса компонентов {% endblock %}
+{% block content_title %} Корпуса компонентов {% endblock %}
+
+{% block content %}
+<script type=text/javascript>
+function saveId(id) {
+    $("#typeId").val(id);
+    $("#action").val("edit");
+};
+function actionDelete(id) {
+    $("#typeId").val(id);
+    $("#action").val("delete");
+};
+function actionAppend() {
+    $("#action").val("append");
+};
+</script>
+<form method="post">
+    <table class="table">
+        <tr>
+            <th>Наименование корпуса</th>
+            <th class="col-2"></th>
+        </tr>
+        {% for package in packages %}
+        <tr>
+            <td>{{ package['package'] }}</td>
+            <td>
+                <div class="btn-cart btn-group" role="group">
+                    <button type="button" id="btnEdit" class="btn btn-secondary" data-toggle="modal"
+                            data-target="#renameTypeModal" OnClick="saveId({{ package['id'] }});">
+                        Редактировать
+                    </button>
+                    <button type="button" id="btnDelete" class="btn btn-secondary" data-toggle="modal"
+                            data-target="#deleteTypeModal" OnClick="actionDelete({{ package['id'] }});">
+                        Удалить
+                    </button>
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <td>
+                <input type="text" class="form-control" name="typeName">
+            </td>
+            <td>
+                <button type="submit" id="btnAppend" class="btn btn-secondary" name="btnAppend" OnClick="actionAppend();">
+                    Добавить
+                </button>
+            </td>
+        </tr>
+    </table>
+
+    <!-- Modal -->
+    <div class="modal fade" id="deleteTypeModal" tabindex="-1" role="dialog"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteTypeModalLabel">Удаление корпуса</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                        <div class="form-outline">
+                            <label class="form-label">Будут удалены и все компоненты с этим корпусом. Удалить?</label>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                            <button type="submit" class="btn btn-primary">Удалить</button>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="renameTypeModal" tabindex="-1" role="dialog"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="renameTypeModalLabel">Переименование корпуса</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                        <div class="form-outline">
+                            <input type="text" class="form-control" name="typeRename">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                            <button type="submit" class="btn btn-primary">Принять</button>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <input type="hidden" name="typeId" id="typeId">
+    <input type="hidden" name="action" id="action">
+</form>
+{% endblock %}

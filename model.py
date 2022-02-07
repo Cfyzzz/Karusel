@@ -33,8 +33,8 @@ class Package(peewee.Model):
 
 
 class Component(peewee.Model):
-    type = peewee.ForeignKeyField(Type, null=False)
-    package = peewee.ForeignKeyField(Package, null=True)
+    type = peewee.ForeignKeyField(Type, null=False, on_delete='CASCADE')
+    package = peewee.ForeignKeyField(Package, null=True, on_delete='CASCADE')
     designation = peewee.CharField(max_length=255, null=False)
     description = peewee.TextField(null=True)
     datasheet = peewee.TextField(null=True)

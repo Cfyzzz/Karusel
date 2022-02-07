@@ -1,7 +1,7 @@
 from peewee import DoesNotExist
 
-from tools import get_base_url, is_valid_input_str
-from model import Type
+from model import Type, Component
+from tools import is_valid_input_str
 from .iservise import *
 
 
@@ -26,8 +26,9 @@ class ListTypesPostService(IService):
             except DoesNotExist:
                 flash("Что-то пошло не так. Тип не найден")
                 return redirect(request.url)
-            flash(f"Тип \"{type_component.type}\" удалён")
+            Component.delete().where(Component.type == type_component).execute()
             Type.delete_by_id(type_id)
+            flash(f"Тип \"{type_component.type}\" удалён")
             return redirect(request.url)
         elif action == "append":
             type_name = self.request.form.get('typeName')
