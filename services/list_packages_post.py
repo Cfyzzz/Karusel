@@ -17,6 +17,15 @@ class ListPackagesPostService(IService):
                 flash("Что-то пошло не так. Корпус не найден")
                 return redirect(request.url)
             new_name = self.request.form.get('typeRename')
+            if not is_valid_input_str(new_name, 16):
+                flash("Вы ввели некорректное имя корпуса")
+                return redirect(request.url)
+
+            new_package = Package.get_or_none(package=new_name)
+            if new_package:
+                flash("Такой корпус уже существует. Введите другое название корпуса")
+                return redirect(request.url)
+
             package.package = new_name
             package.save()
             return redirect(request.url)
@@ -33,7 +42,7 @@ class ListPackagesPostService(IService):
         elif action == "append":
             package_name = self.request.form.get('typeName')
 
-            if not is_valid_input_str(package_name, 64):
+            if not is_valid_input_str(package_name, 16):
                 flash("Вы ввели некорректное имя корпуса")
                 return redirect(request.url)
 

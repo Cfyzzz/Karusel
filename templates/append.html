@@ -9,24 +9,22 @@
         <div class="input-group-prepend">
             <span class="input-group-text">Тип</span>
         </div>
-        <input type="text" list="all_types" name="type"/>
-        <datalist id="all_types">
+        <select name="type">
             {% for type in types %}
             <option value="{{ type['type'] }}">{{ type['type'] }}</option>
             {% endfor %}
-        </datalist>
+        </select>
     </div>
 
     <div class="input-group">
         <div class="input-group-prepend">
             <span class="input-group-text">Корпус</span>
         </div>
-        <input type="text" list="all_packages" name="package"/>
-        <datalist id="all_packages">
+        <select name="package">
             {% for package in packages %}
             <option value="{{ package['package'] }}">{{ package['package'] }}</option>
             {% endfor %}
-        </datalist>
+        </select>
     </div>
 
     <div class="input-group">

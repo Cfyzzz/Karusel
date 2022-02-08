@@ -14,6 +14,15 @@ class ListTypesPostService(IService):
             try:
                 type_component = Type.get_by_id(type_id)
                 new_name = self.request.form.get('typeRename')
+                if not is_valid_input_str(new_name, 64):
+                    flash("Вы ввели некорректное имя типа")
+                    return redirect(request.url)
+
+                new_type = Type.get_or_none(type=new_name)
+                if new_type:
+                    flash("Такой тип уже существует. Введите другое название типа")
+                    return redirect(request.url)
+
                 type_component.type = new_name
                 type_component.save()
             except DoesNotExist:
