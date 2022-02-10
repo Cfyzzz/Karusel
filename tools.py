@@ -69,7 +69,7 @@ def import_from_excel(excel_file, append=True):
     # Processing sheets
     for sheet_name in xl.sheet_names:
         type, _ = Type.get_or_create(type=sheet_name)
-        df = xl.parse(sheet_name)
+        df = xl.parse(sheet_name, dtype={'Корпус': str})
 
         for idx, row in df.iterrows():
             data_component = {'type': type}
