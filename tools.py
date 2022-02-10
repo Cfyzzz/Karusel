@@ -222,4 +222,4 @@ def is_valid_input_str(line: str, length=30) -> bool:
     :param length: максимально допустимая длина строки
     """
     result = len(line) <= length and line != ""
-    return result and re.search(r"^[\w\s]+$", line)
+    return result and re.search(r"^[\w\s\-:/.]+$", line)
