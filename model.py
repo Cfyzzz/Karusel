@@ -22,6 +22,7 @@ class Type(peewee.Model):
 
 class Package(peewee.Model):
     package = peewee.CharField(max_length=16, null=False)
+    type = peewee.ForeignKeyField(Type, null=False)
 
     class Meta:
         verbose_name = u"корпус"

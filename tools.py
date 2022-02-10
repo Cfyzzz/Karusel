@@ -68,16 +68,16 @@ def import_from_excel(excel_file, append=True):
 
     # Processing sheets
     for sheet_name in xl.sheet_names:
-        type, _ = Type.get_or_create(type=sheet_name)
+        the_type, _ = Type.get_or_create(type=sheet_name)
         df = xl.parse(sheet_name, dtype={'Корпус': str})
 
         for idx, row in df.iterrows():
-            data_component = {'type': type}
+            data_component = {'type': the_type}
             for column_xl, column_bd in column_names.items():
                 if column_xl in row:
                     data_component[column_bd] = row[column_xl]
-
-            prepare_data_component(data_component)
+            # TODO - после добавления колонки Тип не импортируется файл
+            prepare_data_component(data_component, the_type)
             quantity = data_component.pop("quantity", 0)
             component, _ = Component.get_or_create(**data_component)
             component.quantity += quantity
@@ -130,7 +130,7 @@ def validate_file(file):
         raise FileExistsError()
 
 
-def prepare_data_component(data):
+def prepare_data_component(data, the_type):
     """ Подготовка компонента к записи в базу """
     if "description" in data:
         data["description"] = "" if str(data["description"]) == "nan" else data["description"]
@@ -149,6 +149,8 @@ def prepare_data_component(data):
 
     if "package" in data:
         package, _ = Package.get_or_create(package=data["package"])
+        package.type = the_type
+        package.save()
         data["package"] = package
 
 
