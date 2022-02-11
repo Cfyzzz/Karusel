@@ -66,21 +66,29 @@ def import_from_excel(excel_file, append=True):
     if xl.sheet_names and not append:
         drop_tables()
 
+    count_errors = 0
     # Processing sheets
     for sheet_name in xl.sheet_names:
         the_type, _ = Type.get_or_create(type=sheet_name)
         df = xl.parse(sheet_name, dtype={'Корпус': str})
 
         for idx, row in df.iterrows():
-            data_component = {'type': the_type}
-            for column_xl, column_bd in column_names.items():
-                if column_xl in row:
-                    data_component[column_bd] = row[column_xl]
-            prepare_data_component(data_component, the_type)
-            quantity = data_component.pop("quantity", 0)
-            component, _ = Component.get_or_create(**data_component)
-            component.quantity += quantity
-            component.save()
+            try:
+                data_component = {'type': the_type}
+                for column_xl, column_bd in column_names.items():
+                    if column_xl in row:
+                        data_component[column_bd] = row[column_xl]
+                prepare_data_component(data_component, the_type)
+                quantity = data_component.pop("quantity", 0)
+                component, _ = Component.get_or_create(**data_component)
+                component.quantity += quantity
+                component.save()
+            except Exception as ex:
+                # TODO - Добавить логирование в файл
+                print(ex)
+                count_errors += 1
+    if count_errors > 0:
+        print(f"При импорте произошли ошибки: {count_errors} шт.")
 
 
 def export_to_excel(path):
@@ -191,7 +199,7 @@ def new_component(json_component: dict):
         return None, None
     type_, _ = Type.get_or_create(type=json_component['type'])
     json_component['type'] = type_
-    prepare_data_component(json_component)
+    prepare_data_component(json_component, type_)
     component, created = Component.get_or_create(**json_component)
     component.save()
     return component, created

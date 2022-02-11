@@ -3,13 +3,34 @@
 {% block title %} Новый компонент {% endblock %}
 {% block content_title %} Добавить компонент на склад {% endblock %}
 {% block content %}
+<script type=text/javascript>
+    document.addEventListener('DOMContentLoaded', function() {
+       var types = document.getElementById("types");
+       fill_packages(types.value);
+    }, false);
+
+    function fill_packages(typeName) {
+        var fleet = document.getElementById("packages");
+        var title = "";
+        for (var i = 0; i < fleet.length; i++) {
+            var txt = fleet.options[i].getAttribute("type");
+            if (txt != typeName) {
+                fleet.options[i].style.display = 'none';
+            } else {
+                fleet.options[i].style.display = 'list-item';
+                if (title == "") title = fleet.options[i].text;
+            }
+        };
+        fleet.value = title;
+    }
+</script>
 
 <form method="post">
     <div class="input-group">
         <div class="input-group-prepend">
             <span class="input-group-text">Тип</span>
         </div>
-        <select name="type">
+        <select name="type" id="types" onChange="fill_packages($(this).val())">
             {% for type in types %}
             <option value="{{ type['type'] }}">{{ type['type'] }}</option>
             {% endfor %}
@@ -20,9 +41,9 @@
         <div class="input-group-prepend">
             <span class="input-group-text">Корпус</span>
         </div>
-        <select name="package">
+        <select name="package" id="packages">
             {% for package in packages %}
-            <option value="{{ package['package'] }}">{{ package['package'] }}</option>
+            <option value="{{ package['package'] }}" type="{{ package['type'] }}">{{ package['package'] }}</option>
             {% endfor %}
         </select>
     </div>
