@@ -21,11 +21,13 @@ function actionAppend() {
     <table class="table">
         <tr>
             <th>Наименование корпуса</th>
+            <th class="col-6">Тип</th>
             <th class="col-2"></th>
         </tr>
         {% for package in packages %}
         <tr>
             <td>{{ package['package'] }}</td>
+            <td>{{ package['type'] }}</td>
             <td>
                 <div class="btn-cart btn-group" role="group">
                     <button type="button" id="btnEdit" class="btn btn-secondary" data-toggle="modal"
@@ -43,6 +45,18 @@ function actionAppend() {
         <tr>
             <td>
                 <input type="text" class="form-control" name="typeName">
+            </td>
+            <td>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Тип</span>
+                    </div>
+                    <select name="typeType">
+                        {% for type in types %}
+                        <option value="{{ type['type'] }}">{{ type['type'] }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
             </td>
             <td>
                 <button type="submit" id="btnAppend" class="btn btn-secondary" name="btnAppend" OnClick="actionAppend();">

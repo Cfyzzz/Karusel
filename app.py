@@ -105,7 +105,6 @@ def list_types():
 
 @app.route('/packages', methods=['GET', 'POST'])
 def list_packages():
-    # TODO - Добавить колонку Тип
     if request.method == 'GET':
         service = ListPackagesGetService(request)
         return service.run()

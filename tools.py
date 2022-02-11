@@ -76,7 +76,6 @@ def import_from_excel(excel_file, append=True):
             for column_xl, column_bd in column_names.items():
                 if column_xl in row:
                     data_component[column_bd] = row[column_xl]
-            # TODO - после добавления колонки Тип не импортируется файл
             prepare_data_component(data_component, the_type)
             quantity = data_component.pop("quantity", 0)
             component, _ = Component.get_or_create(**data_component)
@@ -148,9 +147,7 @@ def prepare_data_component(data, the_type):
             data["quantity"] = 0
 
     if "package" in data:
-        package, _ = Package.get_or_create(package=data["package"])
-        package.type = the_type
-        package.save()
+        package, _ = Package.get_or_create(package=data["package"], type=the_type)
         data["package"] = package
 
 
