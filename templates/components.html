@@ -1,14 +1,30 @@
 {% extends 'base.html' %}
 
+{% block functional %}
+<label for="filter">Фильтр:</label>
+<input id="filter" type="text" placeholder="Поиск...">
+{% endblock %}
+
 {% block title %} {{ type_comp['type'] }} {% endblock %}
 {% block content_title %} {{ type_comp['type'] }} {% endblock %}
 {% block content %}
+
 <script type=text/javascript>
+$(document).ready(function(){
+  $("#filter").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("table tr.row-table").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
+
 function saveId(id, op) {
     $("#componentId").val(id);
     $("#componentOp").val(op);
 }
 </script>
+
 <form method="post">
     <table class="table">
         <tr>
@@ -21,7 +37,7 @@ function saveId(id, op) {
             <th>DataSheet</th>
         </tr>
         {% for component in components %}
-        <tr>
+        <tr class="row-table">
             <td>{{ component['designation'] }}</td>
             <td>{{ component['box'] }}</td>
             <td>{{ component['address'] }}</td>
