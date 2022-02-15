@@ -55,7 +55,7 @@ class ComponentsPopPutService(IService):
                     component = Component.get(
                         *[getattr(Component, k) == v for k, v in params_.items() if k in available_filter])
 
-                tools.prepare_data_component(params_)
+                tools.prepare_data_component(params_, component.type)
                 quantity = params_.pop("quantity", 0)
                 if quantity > component.quantity:
                     flash(f"Недостаточное количество для списания компонента {component.type} {component.designation}")
