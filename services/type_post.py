@@ -35,8 +35,6 @@ class TypePostService(IService):
                         requests.get(url, timeout=3)
                     except requests.exceptions.ConnectTimeout:
                         flash("На карусель запрос не ушёл :(")
-            return redirect(request.url)
-
         elif self.request.form.get('componentOp') == "inc":
             try:
                 component = Component.get_by_id(self.request.form.get('componentId'))
@@ -53,4 +51,4 @@ class TypePostService(IService):
                             'type': component.type.type
                             }
             requests.put(url, headers=headers, data=json.dumps(payload_push, indent=4))
-            return redirect(request.url)
+        return redirect(request.url)

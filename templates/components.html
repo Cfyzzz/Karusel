@@ -17,12 +17,41 @@ $(document).ready(function(){
       $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
     });
   });
+
+  $(".component_field_edit").keydown(function(e){
+        var code = e.key;
+        if(code==="Enter") {
+            updateFieldLabel(this);
+            e.preventDefault();
+        }
+    });
+
+  $(".component_field_edit").focusout(function() {
+    updateFieldLabel(this);
+  });
 });
+
+function updateFieldLabel(elem) {
+    var value = $(elem).val();
+    var $label = $(elem).parent().children(".component_field_label");
+    $label.text(value);
+    $label.show();
+    $(elem).hide();
+    // TODO - обновить на сервере данные
+}
 
 function saveId(id, op) {
     $("#componentId").val(id);
     $("#componentOp").val(op);
-}
+};
+
+function editFieldComponent(name, id) {
+    var value = $("#" + name + "_label_" + id).text().trim();
+    $("#" + name + "_edit_" + id).val(value);
+    $("#" + name + "_edit_" + id).show();
+    $("#" + name + "_edit_" + id).focus();
+    $("#" + name + "_label_" + id).hide();
+};
 </script>
 
 <form method="post">
@@ -38,13 +67,48 @@ function saveId(id, op) {
         </tr>
         {% for component in components %}
         <tr class="row-table">
-            <td>{{ component['designation'] }}</td>
-            <td>{{ component['box'] }}</td>
-            <td>{{ component['address'] }}</td>
-            <td>{{ component['quantity'] }}</td>
-            <td>{{ component['description'] }}</td>
-            <td>{{ component['package'] }}</td>
-            <td class="col-2">{{ component['datasheet'] }}</td>
+            <td>
+                <input type="text" id="designation_edit_{{ component['id'] }}" class="component_field_edit" style="display:none" />
+                <div class="component_field_label" id="designation_label_{{ component['id'] }}" onclick="editFieldComponent('designation', {{ component['id'] }});">
+                    {{ component['designation'] }}
+                </div>
+            </td>
+            <td>
+                <input type="text" id="box_edit_{{ component['id'] }}" class="component_field_edit" style="display:none" />
+                <div class="component_field_label" id="box_label_{{ component['id'] }}" onclick="editFieldComponent('box', {{ component['id'] }});">
+                    {{ component['box'] }}
+                </div>
+            </td>
+            <td>
+                <input type="text" id="address_edit_{{ component['id'] }}" class="component_field_edit" style="display:none" />
+                <div class="component_field_label" id="address_label_{{ component['id'] }}" onclick="editFieldComponent('address', {{ component['id'] }});">
+                    {{ component['address'] }}
+                </div>
+            </td>
+            <td>
+                <input type="text" id="quantity_edit_{{ component['id'] }}" class="component_field_edit" style="display:none" />
+                <div class="component_field_label" id="quantity_label_{{ component['id'] }}" onclick="editFieldComponent('quantity', {{ component['id'] }});">
+                    {{ component['quantity'] }}
+                </div>
+            </td>
+            <td>
+                <input type="text" id="description_edit_{{ component['id'] }}" class="component_field_edit" style="display:none" />
+                <div class="component_field_label" id="description_label_{{ component['id'] }}" onclick="editFieldComponent('description', {{ component['id'] }});">
+                    {{ component['description'] }}
+                </div>
+            </td>
+            <td>
+                <input type="text" id="package_edit_{{ component['id'] }}" class="component_field_edit" style="display:none" />
+                <div class="component_field_label" id="package_label_{{ component['id'] }}" onclick="editFieldComponent('package', {{ component['id'] }});">
+                    {{ component['package'] }}
+                </div>
+            </td>
+            <td class="col-2">
+                <input type="text" id="datasheet_edit_{{ component['id'] }}" class="component_field_edit" style="display:none" />
+                <div class="component_field_label" id="datasheet_label_{{ component['id'] }}" onclick="editFieldComponent('datasheet', {{ component['id'] }});">
+                    {{ component['datasheet'] }}
+                </div>
+            </td>
             <td>
                 <div class="btn-cart btn-group" role="group" aria-label="Cart action">
                     <button type="button" id="btnDecrement" class="btn btn-secondary" data-toggle="modal"
