@@ -34,3 +34,6 @@ option {
     position: relative;
     top: -30px;
 }
+.component_field_label{
+    width: 100%;
+}

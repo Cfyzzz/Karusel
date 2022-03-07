@@ -34,10 +34,14 @@ $(document).ready(function(){
 function updateFieldLabel(elem) {
     var value = $(elem).val();
     var $label = $(elem).parent().children(".component_field_label");
-    $label.text(value);
+    if (value==null || value.trim()=="") {
+        $label.text("-");
+    } else {
+        $label.text(value);
+    };
     $label.show();
     $(elem).hide();
-    // TODO - обновить на сервере данные
+    sendElementToServer($(elem).parent().parent());
 }
 
 function saveId(id, op) {
@@ -47,12 +51,45 @@ function saveId(id, op) {
 
 function editFieldComponent(name, id) {
     var value = $("#" + name + "_label_" + id).text().trim();
+    if (value=="-") {
+        value="";
+    };
     $("#" + name + "_edit_" + id).val(value);
     $("#" + name + "_edit_" + id).show();
     $("#" + name + "_edit_" + id).focus();
     $("#" + name + "_label_" + id).hide();
 };
+
+function fillField(name, id) {
+    var value = $("#" + name + "_label_" + id).val();
+    if (value=="") {
+        $("#" + name + "_label_" + id).text(" - ");
+    }
+};
+
+function sendElementToServer($parent) {
+    var id = $parent.attr('data-id');
+    var designation = getValidValueFromText($parent.children("#designation_label_"+id));
+    var box = getValidValueFromText($parent.children("#box_label_"+id));
+    var address = getValidValueFromText($parent.children("#address_label_"+id));
+    var quantity = getValidValueFromText($parent.children("#quantity_label_"+id));
+    var description = getValidValueFromText($parent.children("#description_label_"+id));
+    var package = getValidValueFromText($parent.children("#package_label_"+id));
+    var datasheet = getValidValueFromText($parent.children("#datasheet_label_"+id));
+
+    // TODO - отправить изменённые данные на сервер
+};
+
+function getValidValueFromText($elem) {
+    var text = $elem.text();
+    if (text=="-") {
+        text = "";
+    };
+    return text;
+};
 </script>
+
+// TODO - Корпус сделать выбором из списка корпусов для данного типа
 
 <form method="post">
     <table class="table">
@@ -66,7 +103,7 @@ function editFieldComponent(name, id) {
             <th>DataSheet</th>
         </tr>
         {% for component in components %}
-        <tr class="row-table">
+        <tr class="row-table" data-id="{{ component['id'] }}">
             <td>
                 <input type="text" id="designation_edit_{{ component['id'] }}" class="component_field_edit" style="display:none" />
                 <div class="component_field_label" id="designation_label_{{ component['id'] }}" onclick="editFieldComponent('designation', {{ component['id'] }});">
@@ -94,19 +131,36 @@ function editFieldComponent(name, id) {
             <td>
                 <input type="text" id="description_edit_{{ component['id'] }}" class="component_field_edit" style="display:none" />
                 <div class="component_field_label" id="description_label_{{ component['id'] }}" onclick="editFieldComponent('description', {{ component['id'] }});">
+                    {% if component['description'] == "" %}
+                      -
+                    {% else %}
                     {{ component['description'] }}
+                    {% endif %}
                 </div>
             </td>
-            <td>
-                <input type="text" id="package_edit_{{ component['id'] }}" class="component_field_edit" style="display:none" />
+            <td onclick="fillField('package', {{ component['id'] }});">
+                <select name="package_{{ component['id'] }}" id="package_edit_{{ component['id'] }}" class="component_field_edit" style="display:none">
+                    {% for package in packages %}
+                    <option value="{{ package['package'] }}">{{ package['package'] }}</option>
+                    {% endfor %}
+                    <option value=""></option>
+                </select>
                 <div class="component_field_label" id="package_label_{{ component['id'] }}" onclick="editFieldComponent('package', {{ component['id'] }});">
+                    {% if component['package'] == None %}
+                      -
+                    {% else %}
                     {{ component['package'] }}
+                    {% endif %}
                 </div>
             </td>
             <td class="col-2">
                 <input type="text" id="datasheet_edit_{{ component['id'] }}" class="component_field_edit" style="display:none" />
                 <div class="component_field_label" id="datasheet_label_{{ component['id'] }}" onclick="editFieldComponent('datasheet', {{ component['id'] }});">
+                    {% if component['datasheet'] == None %}
+                      -
+                    {% else %}
                     {{ component['datasheet'] }}
+                    {% endif %}
                 </div>
             </td>
             <td>
