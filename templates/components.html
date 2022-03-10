@@ -69,15 +69,26 @@ function fillField(name, id) {
 
 function sendElementToServer($parent) {
     var id = $parent.attr('data-id');
-    var designation = getValidValueFromText($parent.children("#designation_label_"+id));
-    var box = getValidValueFromText($parent.children("#box_label_"+id));
-    var address = getValidValueFromText($parent.children("#address_label_"+id));
-    var quantity = getValidValueFromText($parent.children("#quantity_label_"+id));
-    var description = getValidValueFromText($parent.children("#description_label_"+id));
-    var package = getValidValueFromText($parent.children("#package_label_"+id));
-    var datasheet = getValidValueFromText($parent.children("#datasheet_label_"+id));
+    $data = JSON.stringify({
+        "id":id,
+        "designation":$("#designation_label_"+id).text().trim(),
+        "box":$("#box_label_"+id).text().trim(),
+        "address":$("#address_label_"+id).text().trim(),
+        "quantity":$("#quantity_label_"+id).text().trim(),
+        "description":$("#description_label_"+id).text().trim(),
+        "package":$("#package_label_"+id).text().trim(),
+        "datasheet":$("#datasheet_label_"+id).text().trim(),
+        "type":"{{ type_comp['type'] }}"
+    });
 
-    // TODO - отправить изменённые данные на сервер
+    $.ajax({
+        url: '/components',
+        dataType: 'json',
+        type: 'post',
+        contentType: 'application/json',
+        data: $data,
+        processData: false
+    });
 };
 
 function getValidValueFromText($elem) {
@@ -88,8 +99,6 @@ function getValidValueFromText($elem) {
     return text;
 };
 </script>
-
-// TODO - Корпус сделать выбором из списка корпусов для данного типа
 
 <form method="post">
     <table class="table">

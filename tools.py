@@ -139,6 +139,9 @@ def validate_file(file):
 
 def prepare_data_component(data, the_type):
     """ Подготовка компонента к записи в базу """
+    if "id" in data:
+        data["id"] = int(data["id"])
+
     if "description" in data:
         data["description"] = "" if str(data["description"]) == "nan" else data["description"]
 
@@ -200,8 +203,14 @@ def new_component(json_component: dict):
     type_, _ = Type.get_or_create(type=json_component['type'])
     json_component['type'] = type_
     prepare_data_component(json_component, type_)
-    component, created = Component.get_or_create(**json_component)
-    component.save()
+    if 'id' in json_component:
+        _id = json_component.pop("id")
+        json_component.pop("type")
+        Component.set_by_id(_id, json_component)
+        created = False
+    else:
+        component, created = Component.get_or_create(**json_component)
+        component.save()
     return component, created
 
 
