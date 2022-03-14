@@ -207,6 +207,7 @@ def new_component(json_component: dict):
         _id = json_component.pop("id")
         json_component.pop("type")
         Component.set_by_id(_id, json_component)
+        component = Component.get_by_id(_id)
         created = False
     else:
         component, created = Component.get_or_create(**json_component)
