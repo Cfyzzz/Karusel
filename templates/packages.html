@@ -1,10 +1,22 @@
 {% extends 'base.html' %}
 
+{% block links %}
+<link rel="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css" type="text/css"/>
+{% endblock %}
+
+{% block head %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js"></script>
+{% endblock %}
+
 {% block title %} Корпуса компонентов {% endblock %}
 {% block content_title %} Корпуса компонентов {% endblock %}
 
 {% block content %}
 <script type=text/javascript>
+$(document).ready(function() {
+        $('#types').multiselect();
+});
 function saveId(id) {
     $("#typeId").val(id);
     $("#action").val("edit");
@@ -51,7 +63,7 @@ function actionAppend() {
                     <div class="input-group-prepend">
                         <span class="input-group-text">Тип</span>
                     </div>
-                    <select name="typeType">
+                    <select id="types" name="typeType" multiple class="select">
                         {% for type in types %}
                         <option value="{{ type['type'] }}">{{ type['type'] }}</option>
                         {% endfor %}
