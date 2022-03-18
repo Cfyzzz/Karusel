@@ -1,5 +1,6 @@
 from peewee import DoesNotExist
 
+import tools
 from model import Component
 from .iservise import *
 
@@ -28,9 +29,14 @@ class ComponentsPopDeleteService(IService):
         try:
             available_filter = ["id", "package", "designation", "address", "box"]
             required_fields = ["designation", "address", "box"]
-            if all(map(lambda x: x in params, required_fields)):
-                component = Component.get(
-                    *[getattr(Component, k) == v for k, v in params.items() if k in available_filter])
+            if "id" in params or all(map(lambda x: x in params, required_fields)):
+                if "id" in params:
+                    component = Component.get_by_id(params["id"])
+                    if not tools.validate_component(component):
+                        component = None
+                else:
+                    component = Component.get(
+                        *[getattr(Component, k) == v for k, v in params.items() if k in available_filter])
             else:
                 component = None
         except DoesNotExist:

@@ -177,6 +177,9 @@ function getValidValueFromText($elem) {
                     <button type="button" id="btnDecrement" class="btn btn-secondary" data-toggle="modal"
                             data-target="#decrementStoreModal" OnClick="saveId({{ component['id'] }}, 'dec');">Get
                     </button>
+                    <button type="submit" id="btnDelete" class="btn btn-secondary" data-toggle="modal"
+                            OnClick="saveId({{ component['id'] }}, 'delete');">Del
+                    </button>
                     <button type="button" id="btnDIncrement" class="btn btn-secondary" data-toggle="modal"
                             data-target="#incrementStoreModal" OnClick="saveId({{ component['id'] }}, 'inc');">Put
                     </button>
