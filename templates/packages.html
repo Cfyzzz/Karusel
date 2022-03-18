@@ -36,24 +36,6 @@ function actionAppend() {
             <th class="col-6">Тип</th>
             <th class="col-2"></th>
         </tr>
-        {% for package in packages %}
-        <tr>
-            <td>{{ package['package'] }}</td>
-            <td>{{ package['type'] }}</td>
-            <td>
-                <div class="btn-cart btn-group" role="group">
-                    <button type="button" id="btnEdit" class="btn btn-secondary" data-toggle="modal"
-                            data-target="#renameTypeModal" OnClick="saveId({{ package['id'] }});">
-                        Редактировать
-                    </button>
-                    <button type="button" id="btnDelete" class="btn btn-secondary" data-toggle="modal"
-                            data-target="#deleteTypeModal" OnClick="actionDelete({{ package['id'] }});">
-                        Удалить
-                    </button>
-                </div>
-            </td>
-        </tr>
-        {% endfor %}
         <tr>
             <td>
                 <input type="text" class="form-control" name="typeName">
@@ -76,6 +58,24 @@ function actionAppend() {
                 </button>
             </td>
         </tr>
+        {% for package in packages %}
+        <tr>
+            <td>{{ package['package'] }}</td>
+            <td>{{ package['type'] }}</td>
+            <td>
+                <div class="btn-cart btn-group" role="group">
+                    <button type="button" id="btnEdit" class="btn btn-secondary" data-toggle="modal"
+                            data-target="#renameTypeModal" OnClick="saveId({{ package['id'] }});">
+                        Редактировать
+                    </button>
+                    <button type="button" id="btnDelete" class="btn btn-secondary" data-toggle="modal"
+                            data-target="#deleteTypeModal" OnClick="actionDelete({{ package['id'] }});">
+                        Удалить
+                    </button>
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
     </table>
 
     <!-- Modal -->
