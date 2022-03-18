@@ -111,7 +111,7 @@ function getValidValueFromText($elem) {
             <th>Корпус</th>
             <th>DataSheet</th>
         </tr>
-        {% for component in components %}
+        {% for component in components|sort(attribute='designation') %}
         <tr class="row-table" data-id="{{ component['id'] }}">
             <td>
                 <input type="text" id="designation_edit_{{ component['id'] }}" class="component_field_edit" style="display:none" />
