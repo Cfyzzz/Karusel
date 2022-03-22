@@ -22,7 +22,7 @@ class TypePostService(IService):
             requests.put(url_pop, headers=headers, data=json.dumps(payload_pop, indent=4))
 
             is_karusel = component.box.strip().lower()[0:1] in ["k", "к"]
-            if is_karusel and self.request.form.get('openKarusel') == 'on':
+            if is_karusel:
                 address = component.address.split("-")
                 if len(address) == 2:
                     row_device = address[0].strip()
