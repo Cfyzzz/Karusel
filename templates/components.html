@@ -49,6 +49,11 @@ function saveId(id, op) {
     $("#componentOp").val(op);
 };
 
+function deleteComponent(id, op, name) {
+    saveId(id, op);
+    $("#nameComponentForDelete").text(name);
+};
+
 function editFieldComponent(name, id) {
     var value = $("#" + name + "_label_" + id).text().trim();
     if (value=="-") {
@@ -177,8 +182,8 @@ function getValidValueFromText($elem) {
                     <button type="button" id="btnDecrement" class="btn btn-secondary" data-toggle="modal"
                             data-target="#decrementStoreModal" OnClick="saveId({{ component['id'] }}, 'dec');">Get
                     </button>
-                    <button type="submit" id="btnDelete" class="btn btn-secondary" data-toggle="modal"
-                            OnClick="saveId({{ component['id'] }}, 'delete');">Del
+                    <button type="button" id="btnDelete" class="btn btn-secondary" data-toggle="modal"
+                            data-target="#deleteStoreModal" OnClick="deleteComponent({{ component['id'] }}, 'delete', '{{ component['designation'] }}');">Del
                     </button>
                     <button type="button" id="btnDIncrement" class="btn btn-secondary" data-toggle="modal"
                             data-target="#incrementStoreModal" OnClick="saveId({{ component['id'] }}, 'inc');">Put
@@ -237,6 +242,30 @@ function getValidValueFromText($elem) {
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
                             <button type="submit" class="btn btn-primary">Добавить</button>
                         </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deleteStoreModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteStoreModalLabel">Удаление компонента</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-outline">
+                        <label class="form-label">Подтвердите удаление компонента </label>
+                        <label class="form-label" id="nameComponentForDelete"/>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                        <button type="submit" class="btn btn-primary">Удалить</button>
+                    </div>
                 </div>
             </div>
         </div>
