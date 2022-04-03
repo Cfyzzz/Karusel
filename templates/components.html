@@ -2,7 +2,7 @@
 
 {% block functional %}
 <label for="filter">Фильтр:</label>
-<input id="filter" type="text" placeholder="Поиск...">
+<input id="filter" type="text" placeholder="Поиск..."">
 {% endblock %}
 
 {% block title %} {{ type_comp['type'] }} {% endblock %}
@@ -10,7 +10,32 @@
 {% block content %}
 
 <script type=text/javascript>
+
+function myFunction(filterName, column) {
+  // Declare variables
+  var input2, filter, table, tr, td, i, txtValue;
+  input2 = document.getElementById(filterName);
+  filter = input2.value.toUpperCase();
+  table = document.getElementById("tableComponents");
+  tr = table.getElementsByTagName("tr");
+
+  // Loop through all table rows, and hide those who don't match the search query
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[column];
+    if (td) {
+      txtValue = td.innerText.trim().substr(0, 20).replace(/^\s+|\s+$/g, '');
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }
+  }
+};
+
 $(document).ready(function(){
+    $body = $(document)[0].body;
+
   $("#filter").on("keyup", function() {
     var value = $(this).val().toLowerCase();
     $("table tr.row-table").filter(function() {
@@ -38,6 +63,16 @@ $(document).ready(function(){
     $('#incrementStoreModal').on('shown.bs.modal', function() {
       $('#incrementNumber').val("");
       $('#incrementNumber').focus();
+    });
+
+    $("#filterDesignation").on("keyup", function(event) {
+        event.preventDefault();
+        myFunction("filterDesignation", 0);
+    });
+
+    $("#filterPackage").on("keyup", function(event) {
+        event.preventDefault();
+        myFunction("filterPackage", 5);
     });
 });
 
@@ -116,7 +151,23 @@ function getValidValueFromText($elem) {
 </script>
 
 <form method="post">
-    <table class="table">
+    <table class="table" id="tableComponents">
+        <tr>
+            <th><input id="filterDesignation" type="text" placeholder="Поиск..."></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th>
+                <select id="filterPackage" onchange="myFunction('filterPackage', 5);">
+                    <option value=""></option>
+                    {% for package in packages %}
+                    <option value="{{ package['package'] }}">{{ package['package'] }}</option>
+                    {% endfor %}
+                </select>
+            </th>
+            <th></th>
+        </tr>
         <tr>
             <th>Наименование</th>
             <th>№ Ящика</th>
