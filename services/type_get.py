@@ -10,9 +10,11 @@ class TypeGetService(IService):
             return abort(404)
 
         components = self.get_components(type_id)
-        type_component = self.get_type_by_id(type_id)
-        packages = self.get_packages(type_component)
-        return render_template('components.html', components=components, type_comp=type_component, packages=packages)
+        if components:
+            type_component = self.get_type_by_id(type_id)
+            packages = self.get_packages(type_component)
+            return render_template('components.html', components=components, type_comp=type_component, packages=packages)
+        return abort(404)
 
     @staticmethod
     def get_components(type_id: int):

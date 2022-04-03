@@ -29,6 +29,16 @@ $(document).ready(function(){
   $(".component_field_edit").focusout(function() {
     updateFieldLabel(this);
   });
+
+    $('#decrementStoreModal').on('shown.bs.modal', function() {
+      $('#decrementNumber').val("");
+      $('#decrementNumber').focus();
+    });
+
+    $('#incrementStoreModal').on('shown.bs.modal', function() {
+      $('#incrementNumber').val("");
+      $('#incrementNumber').focus();
+    });
 });
 
 function updateFieldLabel(elem) {
@@ -209,7 +219,7 @@ function getValidValueFromText($elem) {
                         <div class="form-outline">
                             <label class="form-label" for="decrementNumber">Количество:</label>
                             <input id="decrementNumber" type="number" class="form-control" size="3" name="numDec" min="1" max="999"
-                                   value="1">
+                                   placeholder="1">
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
@@ -234,7 +244,7 @@ function getValidValueFromText($elem) {
                         <div class="form-outline">
                             <label class="form-label" for="incrementNumber">Количество:</label>
                             <input id="incrementNumber" type="number" class="form-control" size="3" name="numInc" min="1" max="999"
-                                   value="1">
+                                   placeholder="1" >
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
