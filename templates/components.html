@@ -12,6 +12,7 @@
 <script type=text/javascript>
 
 function myFunction(filterName, column) {
+
   // Declare variables
   var input2, filter, table, tr, td, i, txtValue;
   input2 = document.getElementById(filterName);
@@ -21,6 +22,7 @@ function myFunction(filterName, column) {
 
   // Loop through all table rows, and hide those who don't match the search query
   for (i = 0; i < tr.length; i++) {
+    tr[i].style.display = "";
     td = tr[i].getElementsByTagName("td")[column];
     if (td) {
       txtValue = td.innerText.trim().substr(0, 20).replace(/^\s+|\s+$/g, '');
