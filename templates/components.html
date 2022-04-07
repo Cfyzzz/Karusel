@@ -101,8 +101,10 @@ function deleteComponent(id, op, name) {
     $("#nameComponentForDelete").text(name);
 };
 
-function editFieldComponent(name, id) {
-    var value = $("#" + name + "_label_" + id).text().trim();
+function editFieldComponent(name, id, value="") {
+    if (value == "") {
+        value = $("#" + name + "_label_" + id).text().trim();
+    };
     if (value=="-") {
         value="";
     };
@@ -169,6 +171,7 @@ function getValidValueFromText($elem) {
                 </select>
             </th>
             <th></th>
+            <th></th>
         </tr>
         <tr>
             <th>Наименование</th>
@@ -178,6 +181,7 @@ function getValidValueFromText($elem) {
             <th>Описание</th>
             <th>Корпус</th>
             <th>DataSheet</th>
+            <th class="col-2"></th>
         </tr>
         {% for component in components|sort(attribute='designation') %}
         <tr class="row-table" data-id="{{ component['id'] }}">
@@ -232,11 +236,16 @@ function getValidValueFromText($elem) {
             </td>
             <td class="col-2">
                 <input type="text" id="datasheet_edit_{{ component['id'] }}" class="component_field_edit" style="display:none" />
-                <div class="component_field_label" id="datasheet_label_{{ component['id'] }}" onclick="editFieldComponent('datasheet', {{ component['id'] }});">
-                    {% if component['datasheet'] == None %}
-                      -
+                <div class="component_field_label" id="datasheet_label_{{ component['id'] }}">
+                    {% if component['datasheet'] == None or component['datasheet'] == "-"%}
+                     <div  onclick="editFieldComponent('datasheet', {{ component['id'] }}, '{{ component['datasheet'] }}');">
+                         -
+                     </div>
                     {% else %}
-                    {{ component['datasheet'] }}
+                    <div  onclick="editFieldComponent('datasheet', {{ component['id'] }}, '{{ component['datasheet'] }}');">
+                        Перейти по
+                    </div>
+                    <a href="{{ component['datasheet'] }}"> Ссылке</a>
                     {% endif %}
                 </div>
             </td>
