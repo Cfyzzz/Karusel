@@ -11,27 +11,46 @@
 
 <script type=text/javascript>
 
-function myFunction(filterName, column) {
+function filterFunction(filterName, column) {
 
   // Declare variables
-  var input2, filter, table, tr, td, i, txtValue;
-  input2 = document.getElementById(filterName);
-  filter = input2.value.toUpperCase();
+  var input2, filter, table, tr, td, i, txtValue,
+    filterNameDesignation, filterNamePackage, columnDesignation, columnPackage;
+
+  filterNameDesignation = "filterDesignation";
+  filterNamePackage = "filterPackage";
+  columnDesignation = 0;
+  columnPackage = 5;
+  inputDesignation = document.getElementById(filterNameDesignation);
+  inputPackage = document.getElementById(filterNamePackage);
+  filterDesignation = inputDesignation.value.toUpperCase();
+  filterPackage = inputPackage.value;
   table = document.getElementById("tableComponents");
   tr = table.getElementsByTagName("tr");
 
   // Loop through all table rows, and hide those who don't match the search query
   for (i = 0; i < tr.length; i++) {
     tr[i].style.display = "";
-    td = tr[i].getElementsByTagName("td")[column];
-    if (td) {
-      txtValue = td.innerText.trim().substr(0, 20).replace(/^\s+|\s+$/g, '');
-      if (txtValue.toUpperCase().indexOf(filter) > -1) {
-        tr[i].style.display = "";
+    tdDesignation = tr[i].getElementsByTagName("td")[columnDesignation];
+    tdPackage = tr[i].getElementsByTagName("td")[columnPackage];
+    var valDisplay = "";
+    if (tdDesignation) {
+      txtValue = tdDesignation.innerText.trim().substr(0, 20).replace(/^\s+|\s+$/g, '');
+      if (txtValue.toUpperCase().indexOf(filterDesignation) > -1) {
+        valDisplay = "";
       } else {
-        tr[i].style.display = "none";
+        valDisplay = "none";
       }
     }
+    if (valDisplay == "" && tdPackage) {
+      txtValue = tdPackage.innerText.trim().replace(/^\s+|\s+$/g, '');
+      if (txtValue.toUpperCase().indexOf(filterPackage) > -1) {
+        valDisplay = "";
+      } else {
+        valDisplay = "none";
+      }
+    }
+    tr[i].style.display = valDisplay;
   }
 };
 
@@ -69,12 +88,12 @@ $(document).ready(function(){
 
     $("#filterDesignation").on("keyup", function(event) {
         event.preventDefault();
-        myFunction("filterDesignation", 0);
+        filterFunction();
     });
 
     $("#filterPackage").on("keyup", function(event) {
         event.preventDefault();
-        myFunction("filterPackage", 5);
+        filterFunction();
     });
 });
 
@@ -163,7 +182,7 @@ function getValidValueFromText($elem) {
             <th></th>
             <th></th>
             <th>
-                <select id="filterPackage" onchange="myFunction('filterPackage', 5);">
+                <select id="filterPackage" onchange="filterFunction();">
                     <option value=""></option>
                     {% for package in packages %}
                     <option value="{{ package['package'] }}">{{ package['package'] }}</option>
