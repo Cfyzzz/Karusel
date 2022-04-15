@@ -171,9 +171,10 @@ function getValidValueFromText($elem) {
     };
     return text;
 };
+
 </script>
 
-<form method="post">
+<form method="post" enctype=multipart/form-data>
     <table class="table" id="tableComponents">
         <tr>
             <th><input id="filterDesignation" type="text" placeholder="Поиск..."></th>
@@ -200,68 +201,91 @@ function getValidValueFromText($elem) {
             <th>Описание</th>
             <th>Корпус</th>
             <th>DataSheet</th>
-            <th class="col-2"></th>
+            <th class="col-3"></th>
         </tr>
         {% for component in components|sort(attribute='designation') %}
         <tr class="row-table" data-id="{{ component['id'] }}">
             <td>
-                <input type="text" id="designation_edit_{{ component['id'] }}" class="component_field_edit" style="display:none" />
-                <div class="component_field_label" id="designation_label_{{ component['id'] }}" onclick="editFieldComponent('designation', {{ component['id'] }});">
+                <input type="text" id="designation_edit_{{ component['id'] }}" class="component_field_edit"
+                       style="display:none"/>
+                <div class="component_field_label" id="designation_label_{{ component['id'] }}"
+                     onclick="editFieldComponent('designation', {{ component['id'] }});">
                     {{ component['designation'] }}
                 </div>
             </td>
             <td>
-                <input type="text" id="box_edit_{{ component['id'] }}" class="component_field_edit" style="display:none" />
-                <div class="component_field_label" id="box_label_{{ component['id'] }}" onclick="editFieldComponent('box', {{ component['id'] }});">
+                <input type="text" id="box_edit_{{ component['id'] }}" class="component_field_edit"
+                       style="display:none"/>
+                <div class="component_field_label" id="box_label_{{ component['id'] }}"
+                     onclick="editFieldComponent('box', {{ component['id'] }});">
                     {{ component['box'] }}
                 </div>
             </td>
             <td>
-                <input type="text" id="address_edit_{{ component['id'] }}" class="component_field_edit" style="display:none" />
-                <div class="component_field_label" id="address_label_{{ component['id'] }}" onclick="editFieldComponent('address', {{ component['id'] }});">
+                <input type="text" id="address_edit_{{ component['id'] }}" class="component_field_edit"
+                       style="display:none"/>
+                <div class="component_field_label" id="address_label_{{ component['id'] }}"
+                     onclick="editFieldComponent('address', {{ component['id'] }});">
                     {{ component['address'] }}
                 </div>
             </td>
             <td>
-                <input type="text" id="quantity_edit_{{ component['id'] }}" class="component_field_edit" style="display:none" />
-                <div class="component_field_label" id="quantity_label_{{ component['id'] }}" onclick="editFieldComponent('quantity', {{ component['id'] }});">
+                <input type="text" id="quantity_edit_{{ component['id'] }}" class="component_field_edit"
+                       style="display:none"/>
+                <div class="component_field_label" id="quantity_label_{{ component['id'] }}"
+                     onclick="editFieldComponent('quantity', {{ component['id'] }});">
                     {{ component['quantity'] }}
                 </div>
             </td>
             <td>
-                <input type="text" id="description_edit_{{ component['id'] }}" class="component_field_edit" style="display:none" />
-                <div class="component_field_label" id="description_label_{{ component['id'] }}" onclick="editFieldComponent('description', {{ component['id'] }});">
+                <input type="text" id="description_edit_{{ component['id'] }}" class="component_field_edit"
+                       style="display:none"/>
+                <div class="component_field_label" id="description_label_{{ component['id'] }}"
+                     onclick="editFieldComponent('description', {{ component['id'] }});">
                     {% if component['description'] == "" %}
-                      -
+                    -
                     {% else %}
                     {{ component['description'] }}
                     {% endif %}
                 </div>
             </td>
             <td onclick="fillField('package', {{ component['id'] }});">
-                <select name="package_{{ component['id'] }}" id="package_edit_{{ component['id'] }}" class="component_field_edit" style="display:none">
+                <select name="package_{{ component['id'] }}" id="package_edit_{{ component['id'] }}"
+                        class="component_field_edit" style="display:none">
                     {% for package in packages %}
                     <option value="{{ package['package'] }}">{{ package['package'] }}</option>
                     {% endfor %}
                     <option value=""></option>
                 </select>
-                <div class="component_field_label" id="package_label_{{ component['id'] }}" onclick="editFieldComponent('package', {{ component['id'] }});">
+                <div class="component_field_label" id="package_label_{{ component['id'] }}"
+                     onclick="editFieldComponent('package', {{ component['id'] }});">
                     {% if component['package'] == None %}
-                      -
+                    -
                     {% else %}
                     {{ component['package'] }}
                     {% endif %}
                 </div>
             </td>
             <td class="col-2">
-                <input type="text" id="datasheet_edit_{{ component['id'] }}" class="component_field_edit" style="display:none" />
+                <input type="text" id="datasheet_edit_{{ component['id'] }}" class="component_field_edit"
+                       style="display:none"/>
                 <div class="component_field_label" id="datasheet_label_{{ component['id'] }}">
                     {% if component['datasheet'] == None or component['datasheet'] == "-"%}
-                     <div  onclick="editFieldComponent('datasheet', {{ component['id'] }}, '{{ component['datasheet'] }}');">
-                         -
-                     </div>
+                    <div onclick="editFieldComponent('datasheet', {{ component['id'] }}, '{{ component['datasheet'] }}');">
+                        -
+                    </div>
+                    todo Оставить кнопку для модального окна загрузки файла на сервер
+                    <div class="input-group">
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="inputGroupFile{{ component['id'] }}" name="file_{{ component['id'] }}"/>
+                            <label class="custom-file-label" for="inputGroupFile{{ component['id'] }}">File</label>
+                        </div>
+                        <div class="input-group-append">
+                            <input type="submit" class="btn btn-outline-secondary" value="Upload" OnClick="saveId({{ component['id'] }}, 'load');"/>
+                        </div>
+                    </div>
                     {% else %}
-                    <div  onclick="editFieldComponent('datasheet', {{ component['id'] }}, '{{ component['datasheet'] }}');">
+                    <div onclick="editFieldComponent('datasheet', {{ component['id'] }}, '{{ component['datasheet'] }}');">
                         Перейти по
                     </div>
                     <a href="{{ component['datasheet'] }}"> Ссылке</a>
@@ -274,7 +298,9 @@ function getValidValueFromText($elem) {
                             data-target="#decrementStoreModal" OnClick="saveId({{ component['id'] }}, 'dec');">Get
                     </button>
                     <button type="button" id="btnDelete" class="btn btn-secondary" data-toggle="modal"
-                            data-target="#deleteStoreModal" OnClick="deleteComponent({{ component['id'] }}, 'delete', '{{ component['designation'] }}');">Del
+                            data-target="#deleteStoreModal"
+                            OnClick="deleteComponent({{ component['id'] }}, 'delete', '{{ component['designation'] }}');">
+                        Del
                     </button>
                     <button type="button" id="btnDIncrement" class="btn btn-secondary" data-toggle="modal"
                             data-target="#incrementStoreModal" OnClick="saveId({{ component['id'] }}, 'inc');">Put
@@ -297,15 +323,16 @@ function getValidValueFromText($elem) {
                     </button>
                 </div>
                 <div class="modal-body">
-                        <div class="form-outline">
-                            <label class="form-label" for="decrementNumber">Количество:</label>
-                            <input id="decrementNumber" type="number" class="form-control" size="3" name="numDec" min="1" max="999"
-                                   placeholder="1">
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-                            <button type="submit" class="btn btn-primary">Списать</button>
-                        </div>
+                    <div class="form-outline">
+                        <label class="form-label" for="decrementNumber">Количество:</label>
+                        <input id="decrementNumber" type="number" class="form-control" size="3" name="numDec" min="1"
+                               max="999"
+                               placeholder="1">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                        <button type="submit" class="btn btn-primary">Списать</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -322,15 +349,16 @@ function getValidValueFromText($elem) {
                     </button>
                 </div>
                 <div class="modal-body">
-                        <div class="form-outline">
-                            <label class="form-label" for="incrementNumber">Количество:</label>
-                            <input id="incrementNumber" type="number" class="form-control" size="3" name="numInc" min="1" max="999"
-                                   placeholder="1" >
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-                            <button type="submit" class="btn btn-primary">Добавить</button>
-                        </div>
+                    <div class="form-outline">
+                        <label class="form-label" for="incrementNumber">Количество:</label>
+                        <input id="incrementNumber" type="number" class="form-control" size="3" name="numInc" min="1"
+                               max="999"
+                               placeholder="1">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                        <button type="submit" class="btn btn-primary">Добавить</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -360,8 +388,8 @@ function getValidValueFromText($elem) {
         </div>
     </div>
 
-    <input type="hidden" name="componentId" id="componentId" >
-    <input type="hidden" name="componentOp" id="componentOp" >
+    <input type="hidden" name="componentId" id="componentId">
+    <input type="hidden" name="componentOp" id="componentOp">
 </form>
 
 {% endblock %}

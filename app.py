@@ -80,8 +80,8 @@ def from_excel():
         <title>Upload new File</title>
         <h1>Upload new File</h1>
         <form action="" method=post enctype=multipart/form-data>
-          <p><input type=file name=file>
-             <input type=submit value=Upload>
+          <input type=file name=file_4>
+          <input type=submit value=Upload>
         </form>
         '''
 
