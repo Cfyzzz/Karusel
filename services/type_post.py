@@ -1,9 +1,7 @@
 import os
-import traceback
 
 import requests
 from peewee import DoesNotExist
-from werkzeug.exceptions import RequestEntityTooLarge
 
 import tools
 from model import Component
@@ -40,7 +38,7 @@ class TypePostService(IService):
             payload_pop = {'id': self.request.form.get('componentId')}
             requests.delete(url_pop, headers=headers, data=json.dumps(payload_pop, indent=4))
         elif self.request.form.get('componentOp') == "load":
-            self.load_file("datasheets", component)
+            self.load_file("static/datasheets", component)
         return redirect(request.url)
 
     @staticmethod
@@ -62,12 +60,13 @@ class TypePostService(IService):
                     flash("На карусель запрос не ушёл :(")
 
     def load_file(self, local_path, component: Component):
-        file = self.request.files["file_" + self.request.form.get('componentId')]
+        file = self.request.files["file"]
         if not os.access(local_path, os.F_OK):
             os.makedirs(local_path)
         if file and self.allowed_file(file.filename):
             path = os.path.join(local_path, file.filename)
             file.save(path)
+            path = os.path.join(tools.get_base_url(), path)
             component.datasheet = path
             component.save()
             return redirect(request.url)

@@ -95,6 +95,13 @@ $(document).ready(function(){
         event.preventDefault();
         filterFunction();
     });
+
+    $('.custom-file-input').change(function(event){
+        var fileName = event.target.files[0].name;
+        if (event.target.nextElementSibling!=null){
+            event.target.nextElementSibling.innerText=fileName;
+        }
+    });
 });
 
 function updateFieldLabel(elem) {
@@ -269,26 +276,19 @@ function getValidValueFromText($elem) {
             <td class="col-2">
                 <input type="text" id="datasheet_edit_{{ component['id'] }}" class="component_field_edit"
                        style="display:none"/>
-                <div class="component_field_label" id="datasheet_label_{{ component['id'] }}">
+                <div class="component_field_label input-group" id="datasheet_label_{{ component['id'] }}">
                     {% if component['datasheet'] == None or component['datasheet'] == "-"%}
-                    <div onclick="editFieldComponent('datasheet', {{ component['id'] }}, '{{ component['datasheet'] }}');">
+                    <div class="col-6" onclick="editFieldComponent('datasheet', {{ component['id'] }}, '{{ component['datasheet'] }}');">
                         -
                     </div>
-                    todo Оставить кнопку для модального окна загрузки файла на сервер
-                    <div class="input-group">
-                        <div class="custom-file">
-                            <input type="file" class="custom-file-input" id="inputGroupFile{{ component['id'] }}" name="file_{{ component['id'] }}"/>
-                            <label class="custom-file-label" for="inputGroupFile{{ component['id'] }}">File</label>
-                        </div>
-                        <div class="input-group-append">
-                            <input type="submit" class="btn btn-outline-secondary" value="Upload" OnClick="saveId({{ component['id'] }}, 'load');"/>
-                        </div>
-                    </div>
+                    <button type="button" id="btnUploadFile" class="btn btn-secondary" data-toggle="modal"
+                        data-target="#uploadFileStoreModal"  OnClick="saveId({{ component['id'] }}, 'load');">Upload
+                    </button>
                     {% else %}
                     <div onclick="editFieldComponent('datasheet', {{ component['id'] }}, '{{ component['datasheet'] }}');">
                         Перейти по
                     </div>
-                    <a href="{{ component['datasheet'] }}"> Ссылке</a>
+                    <a href="{{ component['datasheet'] }}">&nbspСсылке</a>
                     {% endif %}
                 </div>
             </td>
@@ -382,6 +382,31 @@ function getValidValueFromText($elem) {
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
                         <button type="submit" class="btn btn-primary">Удалить</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="uploadFileStoreModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="uploadFileModalLabel">Загрузка документа</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group">
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="inputGroupFile" name="file"/>
+                            <label class="custom-file-label" for="inputGroupFile"></label>
+                        </div>
+                        <div class="input-group-append">
+                            <input type="submit" class="btn btn-outline-secondary" value="Upload"/>
+                        </div>
                     </div>
                 </div>
             </div>
