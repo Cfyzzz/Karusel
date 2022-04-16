@@ -70,10 +70,12 @@ class TypePostService(IService):
             component.datasheet = path
             component.save()
             return redirect(request.url)
-        # Что-то пошло не так...
+        else:
+            flash("Такой файл не является разрешенным. Разрешенные файлы: "
+                  "'pdf', 'doc', 'docx', 'rtf', 'odt', 'txt', 'zip'")
         return redirect(request.url)
 
     @staticmethod
     def allowed_file(filename):
         return '.' in filename and \
-               filename.rsplit('.', 1)[1] in {'pdf', 'doc', 'docx', 'rtf', 'odt', 'txt'}
+               filename.rsplit('.', 1)[1] in {'pdf', 'doc', 'docx', 'rtf', 'odt', 'txt', 'zip'}

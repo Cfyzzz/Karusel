@@ -6,6 +6,7 @@ from services import *
 
 app = Flask(__name__)
 app.config.from_object(__name__)
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # Limit 16 Mb
 app.secret_key = settings.SECRET_KEY
 
 
