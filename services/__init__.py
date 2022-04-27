@@ -14,3 +14,5 @@ from .type_get import TypeGetService
 from .type_post import TypePostService
 from .append_get import AppendGetService
 from .append_post import AppendPostService
+from .edit_post import EditPostService
+from .edit_get import EditGetService

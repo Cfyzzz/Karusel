@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block title %} Новый компонент {% endblock %}
+<todo> Возможен вариант Редактирование компонента </todo>
 {% block content_title %} Добавить компонент на склад {% endblock %}
 {% block content %}
 <script type=text/javascript>
@@ -52,44 +53,46 @@
         <div class="input-group-prepend">
             <span class="input-group-text">Наименование</span>
         </div>
-        <input type="text" class="form-control" name="designation">
+        <input type="text" class="form-control" name="designation" value="{{ designation }}">
     </div>
 
     <div class="input-group">
         <div class="input-group-prepend">
             <span class="input-group-text">Описание</span>
         </div>
-        <input type="text" class="form-control" name="description">
+        <input type="text" class="form-control" name="description" value="{{ description }}">
     </div>
 
     <div class="input-group">
         <div class="input-group-prepend">
             <span class="input-group-text">Datasheet</span>
         </div>
-        <input type="text" class="form-control" name="datasheet">
+        <todo>Добавить кнопку Upload для файла</todo>
+        <input type="text" class="form-control" name="datasheet" value="{{ datasheet }}">
     </div>
 
     <div class="input-group">
         <div class="input-group-prepend">
             <span class="input-group-text">Ячейка</span>
         </div>
-        <input type="text" class="form-control" name="address">
+        <input type="text" class="form-control" name="address" value="{{ address }}">
     </div>
 
     <div class="input-group">
         <div class="input-group-prepend">
             <span class="input-group-text">№ Ящика</span>
         </div>
-        <input type="text" class="form-control" name="box">
+        <input type="text" class="form-control" name="box" value="{{ box }}">
     </div>
 
     <div class="input-group">
         <div class="input-group-prepend">
             <span class="input-group-text">Количество</span>
         </div>
-        <input type="text" class="form-control" name="quantity">
+        <input type="text" class="form-control" name="quantity" value="{{ quantity }}">
     </div>
 
+    <todo>Возможен вариант Сохранить</todo>
     <button type="submit" class="btn btn-primary">Добавить</button>
 </form>
 

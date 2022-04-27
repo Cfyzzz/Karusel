@@ -8,8 +8,10 @@ import tools
 from services.iservise import IService
 
 
-class AppendPostService(IService):
+class EditPostService(IService):
     def run(self):
+        # TODO - В разработке
+
         base_url = tools.get_base_url()
         url = base_url + "/components/push"
         headers = {'Content-Type': 'application/json'}
@@ -25,9 +27,11 @@ class AppendPostService(IService):
         resp = requests.put(url, headers=headers, data=json.dumps(payload, indent=4))
 
         if resp.status_code == 201:
-            flash(f"Компонент {payload['type']} {payload['designation']} добавлен в количестве {payload['quantity']} шт.")
+            flash(
+                f"Компонент {payload['type']} {payload['designation']} добавлен в количестве {payload['quantity']} шт.")
         elif resp.status_code == 204:
-            flash(f"Добавлен новый компонент {payload['type']} {payload['designation']} в количестве {payload['quantity']} шт.")
+            flash(
+                f"Добавлен новый компонент {payload['type']} {payload['designation']} в количестве {payload['quantity']} шт.")
         else:
             flash("Что-то пошло не так. Компонент не добавлен")
         # return redirect(url_for('index'))

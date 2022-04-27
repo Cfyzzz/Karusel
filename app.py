@@ -31,6 +31,17 @@ def append():
         return service.run()
 
 
+@app.route('/edit', methods=['GET', 'POST'])
+def edit_component():
+    if request.method == 'GET':
+        service = EditGetService(request)
+        return service.run()
+    # TODO - В разработке
+    if request.method == 'POST':
+        service = EditPostService(request)
+        return service.run()
+
+
 @app.route('/type/<int:type_id>', methods=['GET', 'POST'])
 def type_component(type_id):
     if request.method == 'GET':
