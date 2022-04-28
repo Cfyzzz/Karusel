@@ -1,13 +1,41 @@
 {% extends 'base.html' %}
 
-{% block title %} Новый компонент {% endblock %}
-<todo> Возможен вариант Редактирование компонента </todo>
-{% block content_title %} Добавить компонент на склад {% endblock %}
+{% if component %}
+{% block nav_items %}
+<li class="nav-item active">
+    <a class="nav-link" href="/type/{{ component['type']['id'] }}"><b>{{ component['type']['type'] }}</b></a>
+</li>
+{% endblock %}
+{% endif %}
+
+{% block title %}
+{% if component %}
+    Редактирование компонента
+{% else %}
+    Новый компонент
+{% endif %}
+{% endblock %}
+
+{% block content_title %}
+{% if component %}
+    Редактирование компонента
+{% else %}
+    Добавить компонент на склад
+{% endif %}
+{% endblock %}
+
 {% block content %}
 <script type=text/javascript>
     document.addEventListener('DOMContentLoaded', function() {
        var types = document.getElementById("types");
        fill_packages(types.value);
+
+       $('.custom-file-input').change(function(event){
+            var fileName = event.target.files[0].name;
+            if (event.target.nextElementSibling!=null){
+                event.target.nextElementSibling.innerText=fileName;
+        };
+    });
     }, false);
 
     function fill_packages(typeName) {
@@ -24,9 +52,30 @@
         };
         fleet.value = title;
     }
-</script>
 
-<form method="post">
+    function saveId(id, op) {
+        $("#componentId").val(id);
+        $("#componentOp").val(op);
+    };
+</script>
+{% if component %}
+{% set designation = component.designation %}
+{% set description = component.description %}
+{% set address = component.address %}
+{% set box = component.box %}
+{% set quantity = component.quantity %}
+{% set datasheet = component.datasheet %}
+{% set pk = component.id %}
+{% else %}
+{% set designation = "" %}
+{% set description = "" %}
+{% set address = "" %}
+{% set box = "" %}
+{% set quantity = "" %}
+{% set datasheet = "" %}
+{% set pk = 0 %}
+{% endif %}
+<form method="post" enctype=multipart/form-data>
     <div class="input-group">
         <div class="input-group-prepend">
             <span class="input-group-text">Тип</span>
@@ -63,13 +112,17 @@
         <input type="text" class="form-control" name="description" value="{{ description }}">
     </div>
 
+    {% if component %}
     <div class="input-group">
         <div class="input-group-prepend">
             <span class="input-group-text">Datasheet</span>
         </div>
-        <todo>Добавить кнопку Upload для файла</todo>
         <input type="text" class="form-control" name="datasheet" value="{{ datasheet }}">
+        <button type="button" id="btnUploadFile" class="btn btn-secondary" data-toggle="modal"
+            data-target="#uploadFileStoreModal" OnClick="saveId({{ pk }}, 'load');">Upload
+        </button>
     </div>
+    {% endif %}
 
     <div class="input-group">
         <div class="input-group-prepend">
@@ -92,8 +145,40 @@
         <input type="text" class="form-control" name="quantity" value="{{ quantity }}">
     </div>
 
-    <todo>Возможен вариант Сохранить</todo>
-    <button type="submit" class="btn btn-primary">Добавить</button>
+    {% if component %}
+        <button type="submit" class="btn btn-primary" OnClick="saveId({{ pk }}, 'save');">Сохранить</button>
+    {% else %}
+        <button type="submit" class="btn btn-primary">Добавить</button>
+    {% endif %}
+
+    <!-- Modal -->
+    <div class="modal fade" id="uploadFileStoreModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="uploadFileModalLabel">Загрузка документа</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group">
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="inputGroupFile" name="file"/>
+                            <label class="custom-file-label" for="inputGroupFile"></label>
+                        </div>
+                        <div class="input-group-append">
+                            <input type="submit" class="btn btn-outline-secondary" value="Upload"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <input type="hidden" name="componentId" id="componentId">
+    <input type="hidden" name="componentOp" id="componentOp">
 </form>
 
 {% endblock %}

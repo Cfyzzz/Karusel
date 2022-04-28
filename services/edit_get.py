@@ -17,12 +17,7 @@ class EditGetService(IService):
         return render_template('append.html',
                                types=[component.type],
                                packages=[component.package],
-                               designation=component.designation,
-                               description=component.description,
-                               address=component.address,
-                               box=component.box,
-                               quantity=component.quantity,
-                               datasheet=component.datasheet
+                               component=component
                                )
 
     @staticmethod

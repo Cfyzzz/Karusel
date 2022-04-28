@@ -20,7 +20,6 @@ class AppendPostService(IService):
                    'box': self.request.form.get('box'),
                    'quantity': self.request.form.get('quantity'),
                    'package': self.request.form.get('package'),
-                   'datasheet': self.request.form.get('datasheet'),
                    }
         resp = requests.put(url, headers=headers, data=json.dumps(payload, indent=4))
 
