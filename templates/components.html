@@ -89,6 +89,12 @@ $(document).ready(function(){
         event.preventDefault();
         filterFunction();
     });
+
+   $(".row-table").filter(function(){
+    var minAmount = parseInt($(this).attr("min-amount"));
+    var quantity = parseInt($(this).find('td')[3].innerText);
+    return quantity < minAmount;
+   }).addClass("table-warning");
 });
 
 function updateFieldLabel(elem) {
@@ -188,7 +194,8 @@ function show_edit_component(pk) {
             <th class="col-2"></th>
         </tr>
         {% for component in components|sort(attribute='designation') %}
-        <tr class="row-table" data-id="{{ component['id'] }}" ondblclick="show_edit_component({{ component['id'] }});">
+        <tr class="row-table" data-id="{{ component['id'] }}" ondblclick="show_edit_component({{ component['id'] }});"
+        min-amount="{{ component['min_amount'] }}">
             <td>
                 <div class="component_field_label" id="designation_label_{{ component['id'] }}"
                      onclick="editFieldComponent('designation', {{ component['id'] }});">
