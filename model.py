@@ -42,6 +42,7 @@ class Component(peewee.Model):
     address = peewee.CharField(max_length=8, null=False)
     box = peewee.CharField(max_length=4, null=False)
     quantity = peewee.IntegerField(null=False, default=0)
+    min_amount = peewee.IntegerField(null=False, default=0)
 
     class Meta:
         verbose_name = u"компонент"
