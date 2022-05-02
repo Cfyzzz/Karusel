@@ -1,4 +1,4 @@
-from model import Type, Package
+from model import Type, Package, Component
 from .iservise import *
 
 

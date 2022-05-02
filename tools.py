@@ -157,6 +157,15 @@ def prepare_data_component(data, the_type):
         elif data["quantity"].__class__ is not int or data["quantity"] < 0:
             data["quantity"] = 0
 
+    if "min_amount" in data:
+        if data["min_amount"].__class__ is str:
+            try:
+                data["min_amount"] = int(data["min_amount"])
+            except ValueError:
+                data["min_amount"] = 0
+        elif data["min_amount"].__class__ is not int or data["min_amount"] < 0:
+            data["min_amount"] = 0
+
     if "package" in data:
         package, _ = Package.get_or_create(package=data["package"], type=the_type)
         data["package"] = package

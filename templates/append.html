@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 
-{% if component %}
 {% block nav_items %}
+{% if component %}
 <li class="nav-item active">
     <a class="nav-link" href="/type/{{ component['type']['id'] }}"><b>{{ component['type']['type'] }}</b></a>
 </li>
-{% endblock %}
 {% endif %}
+{% endblock %}
 
 {% block title %}
 {% if component %}
@@ -64,6 +64,7 @@
 {% set address = component.address %}
 {% set box = component.box %}
 {% set quantity = component.quantity %}
+{% set min_amount = component.min_amount %}
 {% set datasheet = component.datasheet %}
 {% set pk = component.id %}
 {% else %}
@@ -72,6 +73,7 @@
 {% set address = "" %}
 {% set box = "" %}
 {% set quantity = "" %}
+{% set min_amount = "" %}
 {% set datasheet = "" %}
 {% set pk = 0 %}
 {% endif %}
@@ -143,6 +145,13 @@
             <span class="input-group-text">Количество</span>
         </div>
         <input type="text" class="form-control" name="quantity" value="{{ quantity }}">
+    </div>
+
+    <div class="input-group">
+        <div class="input-group-prepend">
+            <span class="input-group-text">Минимальный остаток</span>
+        </div>
+        <input type="text" class="form-control" name="min_amount" value="{{ min_amount }}">
     </div>
 
     {% if component %}

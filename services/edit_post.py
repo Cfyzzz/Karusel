@@ -36,6 +36,7 @@ class EditPostService(IService):
                    'address': self.request.form.get('address'),
                    'box': self.request.form.get('box'),
                    'quantity': self.request.form.get('quantity'),
+                   'min_amount': self.request.form.get('min_amount'),
                    'package': self.request.form.get('package'),
                    'datasheet': self.request.form.get('datasheet'),
                    'id': component.id,
