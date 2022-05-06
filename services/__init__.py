@@ -16,3 +16,4 @@ from .append_get import AppendGetService
 from .append_post import AppendPostService
 from .edit_post import EditPostService
 from .edit_get import EditGetService
+from .report_excel_file import ReportToExcelFileGetService

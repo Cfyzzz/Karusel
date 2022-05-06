@@ -116,6 +116,37 @@ def export_to_excel(path):
     workbook.save(filename=path)
 
 
+def report_to_excel(path):
+    """ Отчет о заканчивающихся деталях в Excel-файл
+
+    :param path: путь к файлу для выгрузки """
+    workbook = Workbook()
+    for type_item in Type.select():
+        components = Component.select().where((Component.type == type_item) &
+                                              (Component.quantity < Component.min_amount))
+        if components.count() == 0:
+            continue
+
+        new_sheet = workbook.create_sheet(type_item.type)
+        new_sheet.append(["", "Корпус", "Наименование", "№ Ящика", "Ячейка", "Кол-во", "Описание", "Datasheet"])
+        for component in components:
+            row = [
+                "",
+                str(component.package) if component.package else "",
+                component.designation,
+                component.box,
+                component.address,
+                component.quantity,
+                component.description,
+                component.datasheet
+            ]
+            new_sheet.append(row)
+    workbook.remove(workbook["Sheet"])
+    if not workbook.worksheets:
+        return
+    workbook.save(filename=path)
+
+
 def validate_component(component: Component):
     """ Проверка компонента, что он существует в базе """
     if hasattr(component, "id") and hasattr(component, "serialize"):

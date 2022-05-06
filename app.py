@@ -105,6 +105,13 @@ def to_excel():
         return service.run()
 
 
+@app.route('/report', methods=['GET'])
+def report_to_excel():
+    if request.method == 'GET':
+        service = ReportToExcelFileGetService(request)
+        return service.run()
+
+
 @app.route('/types', methods=['GET', 'POST'])
 def list_types():
     if request.method == 'GET':
