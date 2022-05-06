@@ -13,6 +13,7 @@ from services.iservise import IService
 
 class EditPostService(IService):
     def run(self):
+        headers = {'Content-Type': 'application/json'}
         if self.request.form.get('componentId'):
             try:
                 component = Component.get_by_id(self.request.form.get('componentId'))
@@ -26,10 +27,14 @@ class EditPostService(IService):
         if self.request.form.get('componentOp') == "load":
             self.load_file("static/datasheets", component)
             return redirect(self.request.url)
+        elif self.request.form.get('componentOp') == "delete":
+            url_pop = tools.get_base_url() + "/components/pop"
+            payload_pop = {'id': self.request.form.get('componentId')}
+            requests.delete(url_pop, headers=headers, data=json.dumps(payload_pop, indent=4))
+            return redirect("type/" + str(component.type.id))
 
         base_url = tools.get_base_url()
         url = base_url + "/components"
-        headers = {'Content-Type': 'application/json'}
         payload = {'type': self.request.form.get('type'),
                    'designation': self.request.form.get('designation'),
                    'description': self.request.form.get('description'),

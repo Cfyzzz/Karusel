@@ -7,10 +7,10 @@ from .iservise import *
 class EditGetService(IService):
     def run(self):
         component_id = self.request.args.get('id', None)
-        if component_id is None:
+        if component_id is None or not component_id.isdigit():
             return abort(404)
 
-        component: Component = self.get_component(component_id)
+        component: Component = self.get_component(int(component_id))
         if component is None:
             return abort(404)
 
