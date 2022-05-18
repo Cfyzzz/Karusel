@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %} Настройки карусели {% endblock %}
+{% block content_title %} Настройки карусели {% endblock %}
+{% block content %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>
+<script>
+$(document).ready(function(){
+    $body = $(document)[0].body;
+    $('#ip_address').mask('AZZ.AZZ.AZZ.AZZ', { translation: { 'Z': { pattern: /[0-9]/, optional: false }, 'A': { pattern: /[0-2]/, optional: false } } });
+    $('#port').mask('0ZZZ', { translation: { 'Z': { pattern: /[0-9]/, optional: true } } });
+});
+
+</script>
+<form method="post" enctype=multipart/form-data>
+    <table class="table d-flex justify-content-center">
+        <tbody>
+        <tr>
+            <th scope="row">
+                Хост
+            </th>
+            <td>
+                <input type="text" id="ip_address" class="form-input" name="host"
+                       placeholder="xxx.xxx.xxx.xxx" value="{{ host }}">
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">
+                Порт
+            </th>
+            <td>
+                <input type="text" id="port" class="form-input" name="port" placeholder="xxxx" value="{{ port }}">
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="row justify-content-center">
+        <button type="submit" class="btn btn-primary">Сохранить</button>
+    </div>
+</form>
+{% endblock %}

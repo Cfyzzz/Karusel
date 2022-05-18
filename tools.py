@@ -241,6 +241,10 @@ def get_url_karusel() -> str:
     return settings.URL_KARUSEL
 
 
+def set_url_karusel(url: str):
+    settings.URL_KARUSEL = url
+
+
 def is_valid_input_str(line: str, length=30) -> bool:
     """ Проверка строки на длину и допустимые символы (буквы и цифры)
 

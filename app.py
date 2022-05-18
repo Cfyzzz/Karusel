@@ -42,6 +42,16 @@ def edit_component():
         return service.run()
 
 
+@app.route('/settings', methods=['GET', 'POST'])
+def set_settings():
+    if request.method == 'GET':
+        service = SettingsGetService(request)
+        return service.run()
+    if request.method == 'POST':
+        service = SettingsPostService(request)
+        return service.run()
+
+
 @app.route('/type/<int:type_id>', methods=['GET', 'POST'])
 def type_component(type_id):
     if request.method == 'GET':
