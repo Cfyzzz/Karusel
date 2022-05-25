@@ -63,6 +63,7 @@
         $("#nameComponentForDelete").text(name);
     };
 
+
 </script>
 {% if component %}
 {% set designation = component.designation %}
@@ -83,81 +84,81 @@
 {% set datasheet = "" %}
 {% set pk = 0 %}
 {% endif %}
-<form method="post" enctype=multipart/form-data>
-    <div class="input-group">
-        <div class="input-group-prepend">
-            <span class="input-group-text">Тип</span>
+<form method="post" enctype=multipart/form-data class="form-horizontal">
+    <div class="form-group row">
+        <label for="types" class="col-form-label col-sm-2">Тип</label>
+        <div class="col-sm-10">
+            <select name="type" id="types" onChange="fill_packages($(this).val())" class="form-control">
+                {% for type in types %}
+                <option value="{{ type['type'] }}">{{ type['type'] }}</option>
+                {% endfor %}
+            </select>
         </div>
-        <select name="type" id="types" onChange="fill_packages($(this).val())">
-            {% for type in types %}
-            <option value="{{ type['type'] }}">{{ type['type'] }}</option>
-            {% endfor %}
-        </select>
     </div>
 
-    <div class="input-group">
-        <div class="input-group-prepend">
-            <span class="input-group-text">Корпус</span>
+    <div class="form-group row">
+        <label for="packages" class="col-form-label col-sm-2">Корпус</label>
+        <div class="col-sm-10">
+            <select name="package" id="packages" class="form-control">
+                {% for package in packages %}
+                <option value="{{ package['package'] }}" type="{{ package['type'] }}">{{ package['package'] }}</option>
+                {% endfor %}
+            </select>
         </div>
-        <select name="package" id="packages">
-            {% for package in packages %}
-            <option value="{{ package['package'] }}" type="{{ package['type'] }}">{{ package['package'] }}</option>
-            {% endfor %}
-        </select>
     </div>
 
-    <div class="input-group">
-        <div class="input-group-prepend">
-            <span class="input-group-text">Наименование</span>
+    <div class="form-group row">
+        <label class="col-form-label col-sm-2">Наименование</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" name="designation" value="{{ designation }}">
         </div>
-        <input type="text" class="form-control" name="designation" value="{{ designation }}">
     </div>
 
-    <div class="input-group">
-        <div class="input-group-prepend">
-            <span class="input-group-text">Описание</span>
+    <div class="form-group row">
+        <label class="col-form-label col-sm-2">Описание</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" name="description" value="{{ description }}">
         </div>
-        <input type="text" class="form-control" name="description" value="{{ description }}">
     </div>
 
     {% if component %}
-    <div class="input-group">
-        <div class="input-group-prepend">
-            <span class="input-group-text">Datasheet</span>
+    <div class="form-group row">
+        <label class="col-form-label col-sm-2">Datasheet</label>
+        <div class="input-group col-sm-10">
+            <input type="text" class="form-control" name="datasheet" value="{{ datasheet }}">
+            <button type="button" id="btnUploadFile" class="btn btn-secondary" data-toggle="modal"
+                    data-target="#uploadFileStoreModal" OnClick="saveId({{ pk }}, 'load');">Upload
+            </button>
         </div>
-        <input type="text" class="form-control" name="datasheet" value="{{ datasheet }}">
-        <button type="button" id="btnUploadFile" class="btn btn-secondary" data-toggle="modal"
-                data-target="#uploadFileStoreModal" OnClick="saveId({{ pk }}, 'load');">Upload
-        </button>
     </div>
     {% endif %}
 
-    <div class="input-group">
-        <div class="input-group-prepend">
-            <span class="input-group-text">Ячейка</span>
+    <div class="form-group row">
+        <label class="col-form-label col-sm-2">Ячейка</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" name="address" value="{{ address }}">
         </div>
-        <input type="text" class="form-control" name="address" value="{{ address }}">
     </div>
 
-    <div class="input-group">
-        <div class="input-group-prepend">
-            <span class="input-group-text">№ Ящика</span>
+    <div class="form-group row">
+        <label class="col-form-label col-sm-2">№ Ящика</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" name="box" value="{{ box }}">
         </div>
-        <input type="text" class="form-control" name="box" value="{{ box }}">
     </div>
 
-    <div class="input-group">
-        <div class="input-group-prepend">
-            <span class="input-group-text">Количество</span>
+    <div class="form-group row">
+        <label class="col-form-label col-sm-2">Количество</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" name="quantity" value="{{ quantity }}">
         </div>
-        <input type="text" class="form-control" name="quantity" value="{{ quantity }}">
     </div>
 
-    <div class="input-group">
-        <div class="input-group-prepend">
-            <span class="input-group-text">Минимальный остаток</span>
+    <div class="form-group row">
+        <label class="col-form-label col-sm-2">Минимальный остаток</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" name="min_amount" value="{{ min_amount }}">
         </div>
-        <input type="text" class="form-control" name="min_amount" value="{{ min_amount }}">
     </div>
 
     {% if component %}
