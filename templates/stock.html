@@ -3,7 +3,11 @@
 {% block title %} Склад компонентов {% endblock %}
 {% block content_title %} Склад компонентов {% endblock %}
 {% block content %}
+<table class="table d-flex justify-content-center">
+    <tbody>
     {% for type in types %}
-    <a href="{{ url_for('type_component', type_id=type['id']) }}">{{ type['type'] }}</a><br>
+    <tr><td><a href="{{ url_for('type_component', type_id=type['id']) }}">{{ type['type'] }}</a></td></tr>
     {% endfor %}
+    </tbody>
+</table>
 {% endblock %}
