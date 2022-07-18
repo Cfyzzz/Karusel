@@ -47,10 +47,11 @@
                 fleet.options[i].style.display = 'none';
             } else {
                 fleet.options[i].style.display = 'list-item';
-                if (title == "") title = fleet.options[i].text;
+                if (fleet.options[i].text == "") title = "***";
             }
         };
-        fleet.value = title;
+        if (title != "***") fleet.options[fleet.length].text = "";
+        fleet.value = fleet.options[0].text;
     };
 
     function saveId(id, op) {
@@ -63,10 +64,6 @@
         $("#nameComponentForDelete").text(name);
     };
 
-    function copy_datasheet() {
-        var pathDatasheet = $("#pathDatasheetModal").val();
-        $("#pathDatasheet").val(pathDatasheet);
-    };
 </script>
 {% if component %}
 {% set designation = component.designation %}
@@ -142,10 +139,6 @@
                 <input type="file" class="custom-file-input" id="inputGroupFile3" name="file-new-datasheet"/>
                 <label class="custom-file-label" for="inputGroupFile3"></label>
             </div>
-<!--            <input type="text" class="form-control" name="datasheet" value="" id="pathDatasheet">-->
-<!--            <button type="button" id="btnUploadFile2" class="btn btn-secondary" data-toggle="modal"-->
-<!--                    data-target="#uploadFileStoreModalNoSubmit" OnClick="saveId({{ pk }}, 'load');">Target-->
-<!--            </button>-->
         </div>
     </div>
     {% endif %}
@@ -205,31 +198,6 @@
                         <div class="custom-file">
                             <input type="file" class="custom-file-input" id="inputGroupFile" name="file"/>
                             <label class="custom-file-label" for="inputGroupFile"></label>
-                        </div>
-                        <div class="input-group-append">
-                            <input type="submit" class="btn btn-outline-secondary" value="Upload"/>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="uploadFileStoreModalNoSubmit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-         aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="uploadFileModalLabel2">Загрузка документа</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="input-group">
-                        <div class="custom-file">
-                            <input type="file" class="custom-file-input" id="inputGroupFile2" name="file2"/>
-                            <label class="custom-file-label" for="inputGroupFile2" id="pathDatasheetModal"></label>
                         </div>
                         <div class="input-group-append">
                             <input type="submit" class="btn btn-outline-secondary" value="Upload"/>

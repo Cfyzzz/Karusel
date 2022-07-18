@@ -1,6 +1,6 @@
 from peewee import DoesNotExist
 
-from model import Component
+from model import Component, Package
 from .iservise import *
 
 
@@ -14,9 +14,16 @@ class EditGetService(IService):
         if component is None:
             return abort(404)
 
+        component_package = component.package
+        component_package_package = Package.package.null
+        print(component_package)
+        if component_package:
+            component_package_package = component_package.package
+        packages = [component.package]
+        packages.extend(Package.select().where(Package.package != component_package_package))
         return render_template('append.html',
                                types=[component.type],
-                               packages=[component.package],
+                               packages=packages,
                                component=component
                                )
 
