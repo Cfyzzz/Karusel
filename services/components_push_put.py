@@ -10,14 +10,14 @@ class ComponentsPushPutService(IService):
         if 'box' not in self.request.json or 'address' not in self.request.json:
             abort(400)
 
-        _, created = self.append_component(self.request.json)
-        res = jsonify({})
+        new_component, created = self.append_component(self.request.json)
+        res = jsonify(new_component.serialize)
         res.status_code = 201 if created else 204
         return res
 
     @staticmethod
     def append_component(json_component: dict):
-        """ Добавляет компонент в базу. Увеличивает счетчик, если такой существуюет, иначе создаёт новый
+        """ Добавляет компонент в базу. Увеличивает количество, если такой существуюет, иначе создаёт новый
 
         :param json_component - словарь с полями компонента
         :return component, created - компонент и флаг о создании нового в базе
