@@ -142,5 +142,15 @@ def list_packages():
         return service.run()
 
 
+@app.route('/devices', methods=['GET', 'POST'])
+def list_devices():
+    if request.method == 'GET':
+        services = ListDevicesGetService(request)
+        return services.run()
+    if request.method == 'POST':
+        service = ListDevicesPostService(request)
+        return service.run()
+
+
 if __name__ == '__main__':
     app.run(host=settings.HOST, port=settings.PORT, debug=settings.DEBUG)

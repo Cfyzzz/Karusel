@@ -19,3 +19,5 @@ from .edit_get import EditGetService
 from .report_excel_file import ReportToExcelFileGetService
 from .settings_get import SettingsGetService
 from .settings_post import SettingsPostService
+from .list_devices_get import ListDevicesGetService
+from .list_devices_post import ListDevicesPostService
