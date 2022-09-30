@@ -1,3 +1,5 @@
+import re
+
 from peewee import DoesNotExist
 
 from model import Karusel
@@ -24,11 +26,14 @@ class DeviceEditPostService(IService):
             karusel.port = port
             karusel.save()
             flash("Настройки карусели сохранены")
-            print(request)
         return redirect(request.url)
 
-    def check_host(self, host):
-        return True
+    @staticmethod
+    def check_host(host):
+        regexp = r'^([0-2]\d{,2}\.){3}[0-2]\d{,2}$'
+        return re.match(regexp, host) is not None
 
-    def check_port(self, port):
-        return True
+    @staticmethod
+    def check_port(port):
+        regexp = r'^\d{2,4}$'
+        return re.match(regexp, port) is not None
