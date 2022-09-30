@@ -35,6 +35,7 @@ class Package(peewee.Model):
 
 class Karusel(peewee.Model):
     name = peewee.CharField(max_length=50, null=False)
+    number = peewee.IntegerField(default=0)
     host = peewee.CharField(max_length=50, null=False, default='127.0.0.1')
     port = peewee.IntegerField(null=False, default=80)
 

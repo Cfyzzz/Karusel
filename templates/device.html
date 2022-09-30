@@ -26,11 +26,13 @@
 <script>
     {% if karusel %}
     {% set name = karusel.name %}
+    {% set number = karusel.number %}
     {% set host = karusel.host %}
     {% set port = karusel.port %}
     {% set pk = karusel.id %}
     {% else %}
     {% set name = "" %}
+    {% set number = 0 %}
     {% set host = "127.000.000.001" %}
     {% set port = 8000 %}
     {% set pk = 0 %}
@@ -46,6 +48,14 @@
             <td>
                 <input type="text" id="name" class="form-input" name="name"
                        placeholder="Новая карусель" value="{{ name }}" maxlength="30">
+            </td>
+        </tr>
+        <tr class="non-color">
+            <th scope="row">
+                Номер карусели
+            </th>
+            <td>
+                <input type="text" id="number" class="form-input" name="number" value="{{ number }}">
             </td>
         </tr>
         <tr class="non-color">

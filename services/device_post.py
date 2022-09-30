@@ -18,6 +18,7 @@ class DeviceEditPostService(IService):
                 return redirect(request.url)
 
             name = self.request.form.get('name')
+            number = self.request.form.get('number')
             host = self.request.form.get('host')
             port = self.request.form.get('port')
             if not (self.check_host(host) and self.check_port(port)):
@@ -25,12 +26,14 @@ class DeviceEditPostService(IService):
                 return redirect(request.url)
 
             karusel.name = name
+            karusel.number = number
             karusel.host = host
             karusel.port = port
             karusel.save()
             flash("Настройки карусели сохранены")
         elif operation == 'save' and karusel_id == 0:
             name = self.request.form.get('name')
+            number = self.request.form.get('number')
             host = self.request.form.get('host')
             port = self.request.form.get('port')
             if not (self.check_host(host) and self.check_port(port)):
@@ -38,6 +41,7 @@ class DeviceEditPostService(IService):
                 return redirect(request.url)
             karusel = Karusel.create(
                 name=name,
+                number=number,
                 host=host,
                 port=port,
             )
