@@ -13,7 +13,7 @@ table tr:hover .btn-cart{
     display: block;
 }
 
-table tr:hover{
+table tr:not(.non-color):hover{
     background-color: yellow;
 }
 
