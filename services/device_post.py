@@ -8,25 +8,54 @@ from .iservise import *
 
 class DeviceEditPostService(IService):
     def run(self):
-        karusel_id = self.request.form.get('karuselId')
-        if karusel_id:
+        karusel_id = int(self.request.form.get('karuselId', -1))
+        operation = self.request.form.get('operation')
+        if operation == 'save' and karusel_id > 0:
             try:
                 karusel = Karusel.get_by_id(karusel_id)
             except DoesNotExist:
                 flash("Что-то пошло не так. Карусель не найдена")
                 return redirect(request.url)
 
+            name = self.request.form.get('name')
             host = self.request.form.get('host')
             port = self.request.form.get('port')
             if not (self.check_host(host) and self.check_port(port)):
                 flash("Хост или порт указаны неправильно")
                 return redirect(request.url)
 
+            karusel.name = name
             karusel.host = host
             karusel.port = port
             karusel.save()
             flash("Настройки карусели сохранены")
-        return redirect(request.url)
+        elif operation == 'save' and karusel_id == 0:
+            name = self.request.form.get('name')
+            host = self.request.form.get('host')
+            port = self.request.form.get('port')
+            if not (self.check_host(host) and self.check_port(port)):
+                flash("Хост или порт указаны неправильно")
+                return redirect(request.url)
+            karusel = Karusel.create(
+                name=name,
+                host=host,
+                port=port,
+            )
+            if karusel:
+                flash("Настройки карусели сохранены")
+            else:
+                flash("Настройки карусели НЕ сохранены. Что-то пошло не так...")
+        elif operation == 'delete' and karusel_id > 0:
+            try:
+                karusel = Karusel.get_by_id(karusel_id)
+            except DoesNotExist:
+                flash("Что-то пошло не так. Карусель не найдена")
+                return redirect(request.url)
+            if karusel:
+                flash(f"Карусель '{karusel.name}' удалена")
+                karusel.delete_instance()
+                return redirect('/devices')
+        return redirect('/devices/' + str(karusel.id))
 
     @staticmethod
     def check_host(host):

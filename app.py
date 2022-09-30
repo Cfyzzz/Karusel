@@ -42,16 +42,6 @@ def edit_component():
         return service.run()
 
 
-@app.route('/settings', methods=['GET', 'POST'])
-def set_settings():
-    if request.method == 'GET':
-        service = SettingsGetService(request)
-        return service.run()
-    if request.method == 'POST':
-        service = SettingsPostService(request)
-        return service.run()
-
-
 @app.route('/type/<int:type_id>', methods=['GET', 'POST'])
 def type_component(type_id):
     if request.method == 'GET':
@@ -142,20 +132,27 @@ def list_packages():
         return service.run()
 
 
-@app.route('/devices', methods=['GET', 'POST'])
+@app.route('/devices', methods=['GET'])
 def list_devices():
     if request.method == 'GET':
         services = ListDevicesGetService(request)
         return services.run()
-    if request.method == 'POST':
-        service = ListDevicesPostService(request)
-        return service.run()
 
 
 @app.route('/devices/<int:device_id>', methods=['GET', 'POST'])
 def device_edit(device_id):
     if request.method == 'GET':
         services = DeviceEditGetService(request, device_id=device_id)
+        return services.run()
+    elif request.method == 'POST':
+        service = DeviceEditPostService(request)
+        return service.run()
+
+
+@app.route('/devices/new', methods=['GET', 'POST'])
+def device_new():
+    if request.method == 'GET':
+        services = DeviceNewGetService(request)
         return services.run()
     elif request.method == 'POST':
         service = DeviceEditPostService(request)

@@ -1,7 +1,15 @@
 {% extends 'base.html' %}
 
 {% block links %}{% endblock %}
-{% block title %} Карусель "{{ karusel['name'] }}" {% endblock %}
+
+{% block title %}
+{% if karusel %}
+Карусель "{{ karusel['name'] }}"
+{% else %}
+Новая карусель
+{% endif %}
+{% endblock %}
+
 {% block content_title %} Настройки карусели {% endblock %}
 
 {% block head %}{% endblock %}
@@ -15,16 +23,38 @@
 {% block functional %}{% endblock %}
 
 {% block content %}
+<script>
+    {% if karusel %}
+    {% set name = karusel.name %}
+    {% set host = karusel.host %}
+    {% set port = karusel.port %}
+    {% set pk = karusel.id %}
+    {% else %}
+    {% set name = "" %}
+    {% set host = "127.000.000.001" %}
+    {% set port = 8000 %}
+    {% set pk = 0 %}
+    {% endif %}
+</script>
 <form method="post" enctype=multipart/form-data>
     <table class="table d-flex justify-content-center">
         <tbody>
+        <tr class="non-color">
+            <th scope="row">
+                Наименование
+            </th>
+            <td>
+                <input type="text" id="name" class="form-input" name="name"
+                       placeholder="Новая карусель" value="{{ name }}" maxlength="30">
+            </td>
+        </tr>
         <tr class="non-color">
             <th scope="row">
                 Хост
             </th>
             <td>
                 <input type="text" id="ip_address" class="form-input" name="host"
-                       placeholder="xxx.xxx.xxx.xxx" value="{{ karusel.host }}">
+                       placeholder="xxx.xxx.xxx.xxx" value="{{ host }}">
             </td>
         </tr>
         <tr class="non-color">
@@ -32,15 +62,19 @@
                 Порт
             </th>
             <td>
-                <input type="text" id="port" class="form-input" name="port" placeholder="xxxx" value="{{ karusel.port }}">
+                <input type="text" id="port" class="form-input" name="port" placeholder="xxxx" value="{{ port }}">
             </td>
         </tr>
         </tbody>
     </table>
     <div class="row justify-content-center">
-        <button type="submit" class="btn btn-primary">Сохранить</button>
+        <button type="submit" class="btn btn-primary mr-3" onclick="saveKarusel()">Сохранить</button>
+        {% if karusel %}
+        <button type="submit" class="btn btn-secondary" onclick="delKarusel()">Удалить</button>
+        {% endif %}
     </div>
-    <input type="hidden" name="karuselId" value="{{ karusel.id }}">
+    <input type="hidden" name="karuselId" value="{{ pk }}">
+    <input type="hidden" name="operation" id="operation" value="">
 </form>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>
@@ -50,5 +84,13 @@ $(document).ready(function(){
     $('#ip_address').mask('AZZ.AZZ.AZZ.AZZ', { translation: { 'Z': { pattern: /[0-9]/, optional: false }, 'A': { pattern: /[0-2]/, optional: false } } });
     $('#port').mask('0ZZZ', { translation: { 'Z': { pattern: /[0-9]/, optional: true } } });
 });
+
+function saveKarusel() {
+    $('#operation').val('save');
+}
+
+function delKarusel() {
+    $('#operation').val('delete');
+}
 </script>
 {% endblock %}

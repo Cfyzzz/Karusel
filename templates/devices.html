@@ -19,7 +19,7 @@
 {% block nav_items %}{% endblock %}
 
 {% block functional %}
-<button class="btn btn-secondary">Добавить карусель</button>
+<button class="btn btn-secondary" onclick="addNewKarusel()">Добавить карусель</button>
 {% endblock %}
 
 {% block content %}
@@ -37,5 +37,9 @@
     function showEditKarusel(pk) {
         window.location.href = '/devices/' + pk;
     };
+
+    function addNewKarusel() {
+        window.location.href = '/devices/new';
+    }
 </script>
 {% endblock %}
