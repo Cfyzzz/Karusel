@@ -21,3 +21,4 @@ from .settings_get import SettingsGetService
 from .settings_post import SettingsPostService
 from .list_devices_get import ListDevicesGetService
 from .list_devices_post import ListDevicesPostService
+from .device_get import DeviceEditGetService

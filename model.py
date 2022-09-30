@@ -35,6 +35,8 @@ class Package(peewee.Model):
 
 class Karusel(peewee.Model):
     name = peewee.CharField(max_length=50, null=False)
+    host = peewee.CharField(max_length=50, null=False, default='127.0.0.1')
+    port = peewee.IntegerField(null=False, default=80)
 
     class Meta:
         verbose_name = u"карусель"
@@ -71,6 +73,7 @@ class Component(peewee.Model):
             'address': str(self.address).strip(),
             'box': str(self.box).strip(),
             'quantity': self.quantity,
+            'karusel': str(self.karusel).strip(),
         }
         return data
 

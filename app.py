@@ -152,5 +152,12 @@ def list_devices():
         return service.run()
 
 
+@app.route('/device/<int:device_id>', methods=['GET'])
+def device_edit(device_id):
+    if request.method == 'GET':
+        services = DeviceEditGetService(request, device_id=device_id)
+        return services.run()
+
+
 if __name__ == '__main__':
     app.run(host=settings.HOST, port=settings.PORT, debug=settings.DEBUG)
