@@ -33,6 +33,18 @@ class Package(peewee.Model):
         return self.package
 
 
+class Karusel(peewee.Model):
+    name = peewee.CharField(max_length=50, null=False)
+    number = peewee.IntegerField(default=0)
+    host = peewee.CharField(max_length=50, null=False, default='127.0.0.1')
+    port = peewee.IntegerField(null=False, default=80)
+
+    class Meta:
+        verbose_name = u"карусель"
+        verbose_name_plural = u"карусели"
+        database = database
+
+
 class Component(peewee.Model):
     type = peewee.ForeignKeyField(Type, null=False, on_delete='CASCADE')
     package = peewee.ForeignKeyField(Package, null=True, on_delete='CASCADE')
@@ -43,6 +55,7 @@ class Component(peewee.Model):
     box = peewee.CharField(max_length=4, null=False)
     quantity = peewee.IntegerField(null=False, default=0)
     min_amount = peewee.IntegerField(null=False, default=0)
+    karusel = peewee.ForeignKeyField(Karusel, on_delete='CASCADE', null=True)
 
     class Meta:
         verbose_name = u"компонент"
@@ -61,16 +74,17 @@ class Component(peewee.Model):
             'address': str(self.address).strip(),
             'box': str(self.box).strip(),
             'quantity': self.quantity,
+            'karusel': str(self.karusel).strip(),
         }
         return data
 
 
 def drop_all_tables():
-    database.drop_tables([Type, Package, Component])
+    database.drop_tables([Type, Package, Component, Karusel])
 
 
 def create_tables():
-    database.create_tables([Type, Package, Component])
+    database.create_tables([Type, Package, Component, Karusel])
 
 
 database.connect()

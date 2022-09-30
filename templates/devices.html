@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block links %}{% endblock %}
+{% block title %} Настройки каруселей {% endblock %}
+{% block content_title %} Настройки каруселей {% endblock %}
+
+{% block head %}
+<style>
+    .caption-table {
+        caption-side: top;
+        text-align: center;
+    }
+    .row-table {
+        cursor: pointer;
+    }
+</style>
+{% endblock %}
+
+{% block nav_items %}{% endblock %}
+
+{% block functional %}
+<button class="btn btn-secondary" onclick="addNewKarusel()">Добавить карусель</button>
+{% endblock %}
+
+{% block content %}
+<table class="table">
+    <caption class="caption-table">Список каруселей</caption>
+    {% for karusel in karusels %}
+    <tr class="row-table" data-id="{{ karusel['id'] }}" onclick="showEditKarusel({{ karusel['id'] }});">
+        <td>
+            {{ karusel['name'] }}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+<script>
+    function showEditKarusel(pk) {
+        window.location.href = '/devices/' + pk;
+    };
+
+    function addNewKarusel() {
+        window.location.href = '/devices/new';
+    }
+</script>
+{% endblock %}

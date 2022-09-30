@@ -1,2 +1,10 @@
 .idea/
 settings.py
+*.pyc
+exports/*
+resources/*
+static/datasheets/*
+*.sqlite3
+*.xls
+*.zip
+

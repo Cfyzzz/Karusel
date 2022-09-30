@@ -17,5 +17,7 @@ from .append_post import AppendPostService
 from .edit_post import EditPostService
 from .edit_get import EditGetService
 from .report_excel_file import ReportToExcelFileGetService
-from .settings_get import SettingsGetService
-from .settings_post import SettingsPostService
+from .list_devices_get import ListDevicesGetService
+from .device_get import DeviceEditGetService
+from .device_post import DeviceEditPostService
+from .device_new_get import DeviceNewGetService

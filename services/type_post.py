@@ -4,7 +4,7 @@ import requests
 from peewee import DoesNotExist
 
 import tools
-from model import Component
+from model import Component, Karusel
 from .iservise import *
 
 
@@ -43,14 +43,22 @@ class TypePostService(IService):
 
     @staticmethod
     def open_karusel(component):
-        is_karusel = component.box.strip().lower()[0:1] in ["k", "к"]
-        if is_karusel:
+        box = component.box.strip().lower().replace('к', 'k')
+        if 'k' in box:
+            number = box.split('k')[0]
+            number = int(number) if number.isdigit() else 0
+            karusel = Karusel.get_or_none(number=number)
+            if not karusel:
+                flash(f"Неизвестная карусель под номером '{number}'")
+                return
+
             address = component.address.split("-")
             if len(address) == 2:
                 row_device = address[0].strip()
                 column_device = address[1].strip()
                 floor_device = component.box[1:].strip()
-                url = tools.get_url_karusel() \
+                url_karusel = f"http://{karusel.host}:{karusel.port}"
+                url = url_karusel \
                       + "/get?row=" + row_device \
                       + "&column=" + column_device \
                       + "&floor=" + floor_device
@@ -58,6 +66,8 @@ class TypePostService(IService):
                     requests.get(url, timeout=3)
                 except requests.exceptions.ConnectTimeout:
                     flash("На карусель запрос не ушёл :(")
+                except requests.exceptions.ConnectionError:
+                    flash(f"Нет подключения к серверу {karusel.host}:{karusel.port}")
 
     def load_file(self, local_path, component: Component):
         file = self.request.files["file"]

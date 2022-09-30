@@ -13,13 +13,13 @@
     <link rel="stylesheet" href="{{ url_for('static', filename= 'css/style.css') }}">
 
     <title>{% block title %} {% endblock %}</title>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    {% block head %}{% endblock %}
 </head>
-<!-- Optional JavaScript -->
-<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-{% block head %}{% endblock %}
 <body>
 <nav class="navbar navbar-expand-md navbar-light bg-light">
     <a class="navbar-brand" href="{{ url_for('index')}}">Главная</a>
