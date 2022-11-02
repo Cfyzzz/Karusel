@@ -16,7 +16,6 @@ class EditGetService(IService):
 
         component_package = component.package
         component_package_package = Package.package.null
-        print(component_package)
         if component_package:
             component_package_package = component_package.package
         packages = [component.package]

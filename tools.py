@@ -245,3 +245,9 @@ def is_valid_input_str(line: str, length=30) -> bool:
     """
     result = len(line) <= length and line != ""
     return result and re.search(r"^[\w\s\-:/.]+$", line)
+
+
+def prepare_host(host_str):
+    ip_address = host_str.split(".")
+    ip_address = [str(int(x)) for x in ip_address]
+    return ".".join(ip_address)

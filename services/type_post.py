@@ -57,7 +57,8 @@ class TypePostService(IService):
                 row_device = address[0].strip()
                 column_device = address[1].strip()
                 floor_device = component.box[1:].strip()
-                url_karusel = f"http://{karusel.host}:{karusel.port}"
+                host = tools.prepare_host(karusel.host)
+                url_karusel = f"http://{host}:{karusel.port}"
                 url = url_karusel \
                       + "/get?row=" + row_device \
                       + "&column=" + column_device \
@@ -67,7 +68,7 @@ class TypePostService(IService):
                 except requests.exceptions.ConnectTimeout:
                     flash("На карусель запрос не ушёл :(")
                 except requests.exceptions.ConnectionError:
-                    flash(f"Нет подключения к серверу {karusel.host}:{karusel.port}")
+                    flash(f"Нет подключения к серверу {host}:{karusel.port}")
 
     def load_file(self, local_path, component: Component):
         file = self.request.files["file"]
